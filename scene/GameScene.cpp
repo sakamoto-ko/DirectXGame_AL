@@ -14,6 +14,9 @@ void GameScene::Initialize() {
 
 	// ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("mario.jpg");
+
+	// 3Dモデルの生成
+	model_ = Model::Create();
 }
 
 void GameScene::Update() {}

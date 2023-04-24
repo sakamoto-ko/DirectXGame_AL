@@ -4,7 +4,10 @@
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+GameScene::~GameScene() {
+	// デストラクタ
+	delete model_;
+}
 
 void GameScene::Initialize() {
 

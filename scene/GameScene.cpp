@@ -28,7 +28,7 @@ void GameScene::Initialize() {
 	//自キャラの生成
 	player_ = new Player();
 	//自キャラの初期化
-	player_->Initialize();
+	player_->Initialize(model_,textureHandle_);
 }
 
 void GameScene::Update() {
@@ -64,7 +64,7 @@ void GameScene::Draw() {
 	/// </summary>
 
 	//自キャラの描画
-	player_->Draw();
+	player_->Draw(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

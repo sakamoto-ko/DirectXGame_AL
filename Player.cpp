@@ -1,12 +1,11 @@
 #include "Player.h"
-#include <cassert>
 
 Player::Player() {
 
 }
 Player::~Player() {}
 
-    // ‰Šú‰»
+    // åˆæœŸåŒ–
 void Player::Initialize(Model* model, uint32_t textureHandle) {
     assert(model); 
 
@@ -15,10 +14,12 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 
     worldTransform_.Initialize();
 }
-// XV
+// æ›´æ–°
 void Player::Update() {
-    //s—ñ‚ð’è”ƒoƒbƒtƒ@‚É“]‘—
+    //è¡Œåˆ—ã‚’å®šæ•°ãƒãƒƒãƒ•ã‚¡ã«è»¢é€
 	worldTransform_.TransferMatrix();
 }
-// •`‰æ
-void Player::Draw() {}
+// æç”»
+void Player::Draw(ViewProjection viewProjection) {
+	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+}

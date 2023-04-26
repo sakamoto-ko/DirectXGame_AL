@@ -3,7 +3,10 @@
 #include "Model.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "Input.h"
+#include "MyMath.h"
 #include <cassert>
+#include "ImGuiManager.h"
 
 class Player {
 private:
@@ -15,6 +18,9 @@ private:
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
+
+	//キーボード入力
+	Input* input_ = nullptr;
 
 public:
 	Player();

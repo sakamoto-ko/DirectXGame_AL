@@ -39,6 +39,9 @@ void Player::Update() {
 		move.y += kChatacterSpeed;
 	}
 
+	//座標移動(ベクトルの加算)
+	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
+
 	//アフィン行列の呼び出し
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 	
@@ -46,8 +49,9 @@ void Player::Update() {
 	worldTransform_.TransferMatrix();
 
 	//キャラクターの座標を画面表示する処理
-	ImGui::Begin("");
-	ImGui::End();
+	/*ImGui::Begin("");
+	ImGui::InputFloat3("Player",)
+	ImGui::End();*/
 }
 // 描画
 void Player::Draw(ViewProjection viewProjection) {

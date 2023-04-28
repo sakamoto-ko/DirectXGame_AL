@@ -1,12 +1,5 @@
 #pragma once
-#include "TextureManager.h"
-#include "Model.h"
-#include "ViewProjection.h"
-#include "WorldTransform.h"
-#include "Input.h"
-#include "MyMath.h"
-#include <cassert>
-#include "ImGuiManager.h"
+#include "PlayerBullet.h"
 
 class Player {
 private:
@@ -22,6 +15,9 @@ private:
 	//キーボード入力
 	Input* input_ = nullptr;
 
+	//弾
+	PlayerBullet* bullet_ = nullptr;
+
 public:
 	Player();
 	~Player();
@@ -31,4 +27,10 @@ public:
 	void Update();
 	//描画
 	void Draw(ViewProjection viewProjection);
+
+	//旋回
+	void Rotate();
+
+	//攻撃
+	void Attack();
 };

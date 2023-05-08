@@ -53,6 +53,9 @@ private: // メンバ変数
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
 
+	//ビュープロジェクション
+	ViewProjection viewProjection_;
+
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

@@ -27,7 +27,7 @@ void GameScene::Initialize() {
 	//軸方向の表示を有効にする
 	AxisIndicator::GetInstance()->SetVisible(true);
 	//軸方向が参照するビュープロジェクションを指定する(アドレスなし)
-	AxisIndicator::GetInstance()->SetTargetViewProjection(&ViewProjection_);
+	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 }
 
 void GameScene::Update() {
@@ -41,14 +41,14 @@ void GameScene::Update() {
 	if (isDebugCameraActive_) {
 	//デバッグカメラの更新
 	debugCamera_->Update();
-	ViewProjection_.matView = debugCamera_->;
-	ViewProjection_.matProjection = ;
+	viewProjection_.matView = debugCamera_->;
+	viewProjection_.matProjection = ;
 	//ビュープロジェクソン行列の転送
-	ViewProjection_.TransfetMatrix();
+	viewProjection_.TransferMatrix();
 	}
 	else {
 		//ビュープロジェク諸ン行列の更新と転送
-		ViewProjection_.UpdateMatrix();
+		viewProjection_.UpdateMatrix();
 	}
 }
 

@@ -20,7 +20,6 @@ void GameScene::Initialize() {
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
-
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowHeight, WinApp::kWindowWidth);
 
@@ -41,8 +40,8 @@ void GameScene::Update() {
 	if (isDebugCameraActive_) {
 	//デバッグカメラの更新
 	debugCamera_->Update();
-	viewProjection_.matView = debugCamera_->View;
-	viewProjection_.matProjection = ;
+	viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+	viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
 	//ビュープロジェクソン行列の転送
 	viewProjection_.TransferMatrix();
 	}

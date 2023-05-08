@@ -58,6 +58,9 @@ private: // メンバ変数
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
 
+	//テクスチャハンドル
+
+
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

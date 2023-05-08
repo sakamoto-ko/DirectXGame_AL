@@ -14,7 +14,12 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
-	ViewProjection_ = ViewProjection::GetInstance();
+
+	//ワールドトランスフォームの初期化
+	worldTransform_.Initialize();
+	//ビュープロジェクションの初期化
+	viewProjection_.Initialize();
+
 
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowHeight, WinApp::kWindowWidth);

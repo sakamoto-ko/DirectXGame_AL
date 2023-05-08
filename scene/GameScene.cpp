@@ -7,6 +7,8 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete debugCamera_;
+	delete model_;
+	delete player_;
 }
 
 void GameScene::Initialize() {
@@ -18,10 +20,18 @@ void GameScene::Initialize() {
 	//ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("mario.jpg");
 
+	//3Dモデルの生成
+	model_ = Model::Create();
+
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
+
+	//自キャラの生成
+	player_ = new Player();
+	//自キャラの初期化
+	player_->Initialize(model_, textureHandle_);
 
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowHeight, WinApp::kWindowWidth);
@@ -38,6 +48,9 @@ void GameScene::Update() {
 		isDebugCameraActive_ = true;
 	}
 #endif
+
+	//自キャラの更新
+	player_->Update();
 
 	//カメラの処理
 	if (isDebugCameraActive_) {
@@ -76,6 +89,9 @@ void GameScene::Draw() {
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
+
+	//自キャラの描画
+	player_->Draw(viewProjection_);
 
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる

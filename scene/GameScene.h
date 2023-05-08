@@ -59,7 +59,7 @@ private: // メンバ変数
 	ViewProjection viewProjection_;
 
 	//テクスチャハンドル
-
+	uint32_t textureHandle_ = 0;
 
 	/// <summary>
 	/// ゲームシーン用

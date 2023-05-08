@@ -3,7 +3,12 @@
 Player::Player() {
 
 }
-Player::~Player() {}
+Player::~Player() {
+	//bullet_の開放
+	/*if (PlayerBullet * bullet : bullets_) {
+		delete bullets_;
+	}*/
+}
 
 //旋回
 void Player::Rotate() {
@@ -11,22 +16,28 @@ void Player::Rotate() {
 	const float kRotSpeed = 0.02f;
 
 	//押した方向で移動ベクトルを変更
-	if (input_->PushKey(DIK_A)) {
+	/*if (input_->PushKey(DIK_A)) {
 		worldTransform_.rotation_.y -= kRotSpeed;
 	} else if (input_->PushKey(DIK_D)) {
 		worldTransform_.rotation_.y += kRotSpeed;
-	}
+	}*/
 }
 
 //攻撃
 void Player::Attack() { 
 	if (input_->TriggerKey(DIK_SPACE)) {
+		//弾があれば解放する
+		/*if (bullet_) {
+			delete bullet_;
+			bullet_ = nullptr;
+		}*/
+
 		//弾を生成し、初期化
-		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(model_, worldTransform_.translation_);
+		/*PlayerBullet* newBullet = new PlayerBullet();
+		newBullet->Initialize(model_, worldTransform_.translation_);*/
 
 		//弾を登録する
-		bullet_ = newBullet;
+		//bullets_.push_back(newBullet);
 	}
 }
 
@@ -64,33 +75,43 @@ void Player::Update() {
 		move.y -= kChatacterSpeed;
 	}
 
+	//移動限界座標
+	const float kMoveLimitX = kWindowWidth;
+	const float kMoveLimitY = kWindowHeight;
+
+	//範囲を超えない処理
+	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
+	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
+	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
+	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
+
 	// 旋回処理
-	Rotate();
+	//Rotate();
 
 	//座標移動(ベクトルの加算)
-	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
+	worldTransform_.translation_ = Add(worldTransform_.translation_.x, move);
 
 	//WorldTransformの更新
 	worldTransform_.UpdateMatrix();
 
 	//キャラクターの攻撃処理
-	Attack();
+	//Attack();
 
 	//弾更新
-	if (bullet_) {
+	/*for (PlayerBullet* bullet : bullets_) {
 		bullet_->Update();
-	}
+	}*/
 
 	//キャラクターの座標を画面表示する処理
-	/*ImGui::Begin("");
-	ImGui::InputFloat3("Player",)
-	ImGui::End();*/
+	ImGui::Begin("");
+	ImGui::InputFloat3("Player%f, %f", worldTransform_.translation_.x, worldTransform_.translation_.y);;
+	ImGui::End();
 }
 // 描画
 void Player::Draw(ViewProjection viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 	//弾描画
-	if (bullet_) {
+	/*for (PlayerBullet * bullet : bullets_) {
 		bullet_->Draw(viewProjection);
-	}
+	}*/
 }

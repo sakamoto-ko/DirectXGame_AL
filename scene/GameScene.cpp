@@ -1,19 +1,51 @@
 #include "GameScene.h"
 #include "TextureManager.h"
 #include <cassert>
+#include "AxisIndicator.h"
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+GameScene::~GameScene() {
+	delete debugCamera_;
+}
 
 void GameScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+	ViewProjection_ = ViewProjection::GetInstance();
+
+	//デバッグカメラの生成
+	debugCamera_ = new DebugCamera(WinApp::kWindowHeight, WinApp::kWindowWidth);
+
+	//軸方向の表示を有効にする
+	AxisIndicator::GetInstance()->SetVisible(true);
+	//軸方向が参照するビュープロジェクションを指定する(アドレスなし)
+	AxisIndicator::GetInstance()->SetTargetViewProjection(&ViewProjection_);
 }
 
-void GameScene::Update() {}
+void GameScene::Update() {
+#ifdef _DEBUG
+	if (input_->TriggerKey(DIK_RETURN)) {
+		isDebugCameraActive_ = true;
+	}
+#endif
+
+	//カメラの処理
+	if (isDebugCameraActive_) {
+	//デバッグカメラの更新
+	debugCamera_->Update();
+	ViewProjection_.matView = debugCamera_->;
+	ViewProjection_.matProjection = ;
+	//ビュープロジェクソン行列の転送
+	ViewProjection_.TransfetMatrix();
+	}
+	else {
+		//ビュープロジェク諸ン行列の更新と転送
+		ViewProjection_.UpdateMatrix();
+	}
+}
 
 void GameScene::Draw() {
 

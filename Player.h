@@ -1,5 +1,6 @@
 #pragma once
 #include "PlayerBullet.h"
+#include <list>
 
 class Player {
 private:
@@ -16,7 +17,7 @@ private:
 	Input* input_ = nullptr;
 
 	//弾
-	PlayerBullet* bullet_ = nullptr;
+	std::list<PlayerBullet*> bullets_;
 
 public:
 	Player();

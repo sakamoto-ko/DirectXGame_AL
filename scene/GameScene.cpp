@@ -43,6 +43,7 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_RETURN)) {
 		isDebugCameraActive_ = true;
@@ -54,17 +55,18 @@ void GameScene::Update() {
 
 	//カメラの処理
 	if (isDebugCameraActive_) {
-	//デバッグカメラの更新
-	debugCamera_->Update();
-	viewProjection_.matView = debugCamera_->GetViewProjection().matView;
-	viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-	//ビュープロジェクソン行列の転送
-	viewProjection_.TransferMatrix();
+		//デバッグカメラの更新
+		debugCamera_->Update();
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		//ビュープロジェクソン行列の転送
+		viewProjection_.TransferMatrix();
 	}
 	else {
 		//ビュープロジェク諸ン行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
+
 }
 
 void GameScene::Draw() {

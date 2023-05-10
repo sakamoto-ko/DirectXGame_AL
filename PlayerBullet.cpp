@@ -9,11 +9,13 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position) {
 	model_ = model;
 	textureHandle_ = TextureManager::Load("black.png");
 
+	worldTransform_.Initialize();
+
 	worldTransform_.translation_ = position;
 }
 // 更新
 void PlayerBullet::Update() {
-	// WorldTransformの更新
+	//WorldTransformの更新
 	worldTransform_.UpdateMatrix();
 }
 // 描画

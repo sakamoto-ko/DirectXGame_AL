@@ -18,7 +18,8 @@ private:
 	Input* input_ = nullptr;
 
 	//弾
-	std::list<PlayerBullet*> bullets_;
+	//std::list<PlayerBullet*> bullet_;
+	PlayerBullet* bullet_ = nullptr;
 
 public:
 	Player();

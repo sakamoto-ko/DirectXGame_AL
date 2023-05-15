@@ -58,6 +58,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	//シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
 }
+
 // 更新
 void Player::Update() {
 	//デスフラグの立った弾を削除
@@ -124,6 +125,7 @@ void Player::Update() {
 	ImGui::Text("Player%f, %f", worldTransform_.translation_.x, worldTransform_.translation_.y);
 	ImGui::End();*/
 }
+
 // 描画
 void Player::Draw(ViewProjection viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);

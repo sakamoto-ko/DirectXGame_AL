@@ -11,6 +11,12 @@
 
 class Enemy {
 private:
+	//行動フェーズ
+	enum class Phase {
+		Approach,//接近
+		Leave,//離脱
+	};
+
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 
@@ -23,8 +29,8 @@ private:
 	//キーボード入力
 	Input* input_ = nullptr;
 
-	//速度
-	Vector3 velocity_ = {};
+	//フェーズ
+	Phase phase_ = Phase::Approach;
 
 public:
 	Enemy();
@@ -35,4 +41,7 @@ public:
 	void Update();
 	//描画
 	void Draw(ViewProjection viewProjection);
+
+	void ApproachUpdate();
+	void LeaveUpdate();
 };

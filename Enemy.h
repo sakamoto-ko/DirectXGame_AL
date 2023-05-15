@@ -1,13 +1,5 @@
 ﻿#pragma once
-#include "WorldTransform.h"
-#include "TextureManager.h"
-#include "Model.h"
-#include "ViewProjection.h"
-#include "WorldTransform.h"
-#include "Input.h"
-#include "MyMath.h"
-#include <cassert>
-#include "ImGuiManager.h"
+#include "EnemyBullet.h"
 
 class Enemy {
 private:
@@ -32,6 +24,9 @@ private:
 	//フェーズ
 	Phase phase_ = Phase::Approach;
 
+	//弾
+	std::list<EnemyBullet*> enemyBullet_;
+
 public:
 	Enemy();
 	~Enemy();
@@ -44,4 +39,7 @@ public:
 
 	void ApproachUpdate();
 	void LeaveUpdate();
+
+	//弾発射
+	void Fire();
 };

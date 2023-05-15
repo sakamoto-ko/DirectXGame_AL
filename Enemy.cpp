@@ -1,21 +1,6 @@
 ﻿#include "Enemy.h"
-
-Enemy::Enemy() {
-
-}
-Enemy::~Enemy() {
-
-}
-
-void Enemy::Initialize(Model* model, uint32_t textureHandle) {
-	assert(model);
-
-	model_ = model;
-	textureHandle_ = textureHandle;
-
-	worldTransform_.Initialize();
-	worldTransform_.translation_.z = 100.0f;
-}
+#include "WorldTransform.h"
+#include <list>
 
 void Enemy::ApproachUpdate() {
 	//移動(ベクトルを加算)
@@ -31,7 +16,52 @@ void Enemy::LeaveUpdate() {
 	worldTransform_.translation_ = Add(worldTransform_.translation_, { -0.3f,0.3f,-0.3f });
 }
 
+void Enemy::Fire() {
+	//弾の速度
+	const float kBulletSpeed = -1.0f;
+	Vector3 velocity(0, 0, kBulletSpeed);
+
+	//速度ベクトルを自機の向きに合わせて回転させり￥る
+	velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+
+	//弾を生成し、初期化
+	EnemyBullet* newBullet = new EnemyBullet();
+	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
+
+	//弾を登録する
+	enemyBullet_.push_back(newBullet);
+}
+
+Enemy::Enemy() {
+
+}
+Enemy::~Enemy() {
+
+}
+
+void Enemy::Initialize(Model* model, uint32_t textureHandle) {
+	assert(model);
+
+	model_ = model;
+	textureHandle_ = textureHandle;
+
+	worldTransform_.Initialize();
+	worldTransform_.translation_.x = 30.0f;
+	worldTransform_.translation_.z = 100.0f;
+	Fire();
+}
+
 void Enemy::Update() {
+	//デスフラグの立った弾を削除
+	enemyBullet_.remove_if([](EnemyBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+		}
+	);
+
 	//WorldTransformの更新
 	worldTransform_.UpdateMatrix();
 
@@ -45,6 +75,12 @@ void Enemy::Update() {
 		LeaveUpdate();
 		break;
 	}
+
+	//弾更新
+	for (EnemyBullet* bullet : enemyBullet_) {
+		bullet->Update();
+	}
+
 	//キャラクターの座標を画面表示する処理
 	/*ImGui::Begin("");
 	ImGui::Text("Enemy%f, %f", worldTransform_.translation_.x, worldTransform_.translation_.y);
@@ -53,4 +89,8 @@ void Enemy::Update() {
 
 void Enemy::Draw(ViewProjection viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	//弾描画
+	for (EnemyBullet* bullet : enemyBullet_) {
+		bullet->Draw(viewProjection);
+	}
 }

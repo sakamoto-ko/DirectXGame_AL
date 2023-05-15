@@ -22,13 +22,26 @@ private:
 	// キーボード入力
 	Input* input_ = nullptr;
 
+	//速度
+	Vector3 velocity_;
+
+	//寿命<frm>
+	static const int32_t kLifeTime = 60 * 5;
+
+	//デスタイマー
+	int32_t deathTimer_ = kLifeTime;
+	//デスフラグ
+	bool isDead_ = false;
+
 public:
 	PlayerBullet();
 	~PlayerBullet();
 	// 初期化
-	void Initialize(Model* model, const Vector3& position);
+	void Initialize(Model* model, const Vector3& position, const Vector3 velocity);
 	// 更新
 	void Update();
 	// 描画
 	void Draw(const ViewProjection& viewProjection);
+
+	bool IsDead() const { return isDead_; }
 };

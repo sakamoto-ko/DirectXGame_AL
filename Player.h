@@ -1,7 +1,5 @@
 #pragma once
 #include "PlayerBullet.h"
-#include "WorldTransform.h"
-#include <list>
 
 class Player {
 private:
@@ -35,4 +33,7 @@ public:
 
 	//攻撃
 	void Attack();
+
+	//ワールド座標を取得
+	Vector3 GetWorldPosition();
 };

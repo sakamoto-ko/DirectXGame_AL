@@ -1,7 +1,4 @@
 #include "GameScene.h"
-#include "TextureManager.h"
-#include <cassert>
-#include "AxisIndicator.h"
 
 GameScene::GameScene() {}
 
@@ -38,6 +35,9 @@ void GameScene::Initialize() {
 	enemy_ = new Enemy();
 	//敵キャラの初期化
 	enemy_->Initialize(model_, textureHandle_);
+
+	//敵キャラに自キャラのアドレスを渡す
+	enemy_->SetPlayer(player_);
 
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowHeight, WinApp::kWindowWidth);

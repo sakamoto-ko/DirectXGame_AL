@@ -8,7 +8,7 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 	assert(model);
 
 	model_ = model;
-	textureHandle_ = TextureManager::Load("black.png");
+	textureHandle_ = TextureManager::Load("red.png");
 
 	worldTransform_.Initialize();
 

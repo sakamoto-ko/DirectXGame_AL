@@ -3,11 +3,19 @@
 #include "TextureManager.h"
 #include "Model.h"
 #include "ViewProjection.h"
-#include "WorldTransform.h"
 #include "Input.h"
 #include "MyMath.h"
 #include <cassert>
 #include "ImGuiManager.h"
+
+#include "Audio.h"
+#include "DirectXCommon.h"
+#include "SafeDelete.h"
+#include "Sprite.h"
+#include "DebugCamera.h"
+#include "AxisIndicator.h"
+
+#include <list>
 
 class EnemyBullet
 {

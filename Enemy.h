@@ -1,5 +1,9 @@
 ﻿#pragma once
 #include "EnemyBullet.h"
+#include"Player.h"
+
+//自機クラスの前方宣言
+class Player;
 
 class Enemy {
 private:
@@ -27,6 +31,9 @@ private:
 	//弾
 	std::list<EnemyBullet*> enemyBullet_;
 
+	//自キャラ
+	Player* player_ = nullptr;
+
 public:
 	Enemy();
 	~Enemy();
@@ -42,4 +49,9 @@ public:
 
 	//弾発射
 	void Fire();
+
+	void SetPlayer(Player* player) { player_ = player; }
+
+	//ワールド座標を取得
+	Vector3 GetWorldPosition();
 };

@@ -44,11 +44,11 @@ float Length(const Vector3& v) {
 // 正規化
 Vector3 Normalize(const Vector3& v) {
 	Vector3 result = { 0 };
-	float a = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
-	if (a != 0) {
-		result.x = v.x / a;
-		result.y = v.y / a;
-		result.z = v.z / a;
+	float length = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+	if (length != 0) {
+		result.x = v.x / length;
+		result.y = v.y / length;
+		result.z = v.z / length;
 	}
 	return result;
 }

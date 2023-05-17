@@ -29,10 +29,13 @@ private:
 	Phase phase_ = Phase::Approach;
 
 	//弾
-	std::list<EnemyBullet*> enemyBullet_;
+	std::list<EnemyBullet*> bullets_;
 
 	//自キャラ
 	Player* player_ = nullptr;
+
+	//発射タイマー
+	int32_t shotTimer = 0;
 
 public:
 	Enemy();
@@ -44,7 +47,14 @@ public:
 	//描画
 	void Draw(ViewProjection viewProjection);
 
+	//接近フェーズ初期化
+	void ApproachInit();
+	//接近フェーズ更新
 	void ApproachUpdate();
+
+	//離脱フェーズ初期化
+	//void LeaveInit();
+	//離脱フェーズ更新
 	void LeaveUpdate();
 
 	//弾発射
@@ -54,4 +64,7 @@ public:
 
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
+
+	//発射間隔
+	static const int kFireInterval = 60;
 };

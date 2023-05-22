@@ -61,6 +61,9 @@ private: // メンバ変数
 	//敵キャラ
 	Enemy* enemy_ = nullptr;
 
+	//衝突判定と応答
+	void CheckAllCollisions();
+
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

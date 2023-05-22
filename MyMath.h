@@ -5,6 +5,11 @@
 #include "Matrix4x4.h"
 #include <cmath>
 
+const float playerRadius = 32.0f;
+const float enemyRadius = 32.0f;
+const float playerBulletRadius = 32.0f;
+const float enemyBulletRadius = 32.0f;
+
 // 加算
 Vector3 Add(const Vector3& v1, const Vector3& v2);
 // 減算

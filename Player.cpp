@@ -57,6 +57,10 @@ Vector3 Player::GetWorldPosition() {
 	return worldPos;
 }
 
+void Player::OnCollision() {
+	//何もしない
+}
+
 // 初期化
 void Player::Initialize(Model* model, uint32_t textureHandle) {
 	assert(model);

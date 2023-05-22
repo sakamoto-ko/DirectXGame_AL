@@ -1,5 +1,45 @@
 #include "GameScene.h"
 
+void GameScene::CheckAllCollisions() {
+	//判定対象AとBの座標
+	Vector3 posA, posB;
+
+	//自弾リストの取得
+	//const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
+	//敵弾リストの取得
+	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
+
+#pragma region 自キャラと敵弾の当たり判定
+	//自キャラの座標
+	posA = player_->GetWorldPosition();
+
+	//自キャラと敵弾全ての当たり判定
+	for (EnemyBullet* bullet : enemyBullets) {
+		//敵弾の座標
+		posB = bullet->GetWorldPosition();
+
+		//座標AとBの距離を求める
+		//球と球の交差判定
+		if (posA.z + playerRadius >= posB.z && posA.z <= posB.z + enemyBulletRadius) {
+			if (posA.y + playerRadius >= posB.y && posA.y <= posB.y + enemyBulletRadius) {
+				if (posA.x + playerRadius >= posB.x && posA.x <= posB.x + enemyBulletRadius) {
+					//自キャラの衝突時コールバックを呼び出す
+					player_->OnCollision();
+					//敵弾の衝突時コールバックを呼び出す
+					bullet->OnCollision();
+				}
+			}
+		}
+	}
+#pragma endregion
+
+#pragma region 自弾と敵キャラの当たり判定
+#pragma endregion
+
+#pragma region 自弾と敵弾の当たり判定
+#pragma endregion
+}
+
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
@@ -75,7 +115,6 @@ void GameScene::Update() {
 		//ビュープロジェク諸ン行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
-
 }
 
 void GameScene::Draw() {

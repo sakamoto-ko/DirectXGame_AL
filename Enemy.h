@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "EnemyBullet.h"
-#include"Player.h"
+#include "Player.h"
 
 //自機クラスの前方宣言
 class Player;
@@ -67,4 +67,11 @@ public:
 
 	//発射間隔
 	static const int kFireInterval = 60;
+
+	//衝突を検出したら呼び出されるコールバック関数	
+	void OnCollision();
+
+	//弾リストを取得
+	const std::list<EnemyBullet*>& GetBullets() { return bullets_; }
+
 };

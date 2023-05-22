@@ -86,6 +86,8 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetVisible(true);
 	//軸方向が参照するビュープロジェクションを指定する(アドレスなし)
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
+
+	CheckAllCollisions();
 }
 
 void GameScene::Update() {

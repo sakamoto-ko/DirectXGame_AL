@@ -34,27 +34,27 @@ void GameScene::CheckAllCollisions() {
 #pragma endregion
 
 #pragma region 自弾と敵キャラの当たり判定
-	////自弾の座標
-	//for (PlayerBullet* bullet : playerBullets) {
-	//	posA = bullet->GetWorldPosition();
+	//自弾の座標
+	for (PlayerBullet* bullet : playerBullets) {
+		posA = bullet->GetWorldPosition();
 
-	//	//自弾と敵キャラ全ての当たり判定
-	//	//敵キャラの座標
-	//	posB = enemy_->GetWorldPosition();
+		//自弾と敵キャラ全ての当たり判定
+		//敵キャラの座標
+		posB = enemy_->GetWorldPosition();
 
-	//	//座標AとBの距離を求める
-	//	//球と球の交差判定
-	//	if (posA.z + playerRadius >= posB.z && posA.z <= posB.z + enemyBulletRadius) {
-	//		if (posA.y + playerRadius >= posB.y && posA.y <= posB.y + enemyBulletRadius) {
-	//			if (posA.x + playerRadius >= posB.x && posA.x <= posB.x + enemyBulletRadius) {
-	//				//自弾の衝突時コールバックを呼び出す
-	//				bullet->OnCollision();
-	//				//敵キャラの衝突時コールバックを呼び出す
-	//				enemy_->OnCollision();
-	//			}
-	//		}
-	//	}
-	//}
+		//座標AとBの距離を求める
+		//球と球の交差判定
+		if (posA.z + playerRadius >= posB.z && posA.z <= posB.z + enemyBulletRadius) {
+			if (posA.y + playerRadius >= posB.y && posA.y <= posB.y + enemyBulletRadius) {
+				if (posA.x + playerRadius >= posB.x && posA.x <= posB.x + enemyBulletRadius) {
+					//自弾の衝突時コールバックを呼び出す
+					bullet->OnCollision();
+					//敵キャラの衝突時コールバックを呼び出す
+					enemy_->OnCollision();
+				}
+			}
+		}
+	}
 #pragma endregion
 
 #pragma region 自弾と敵弾の当たり判定

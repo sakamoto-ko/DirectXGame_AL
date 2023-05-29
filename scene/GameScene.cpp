@@ -92,6 +92,7 @@ GameScene::~GameScene() {
 	delete player_;
 	delete enemy_;
 	delete modelSkydome_;
+	delete railCamera_;
 }
 
 void GameScene::Initialize() {
@@ -130,6 +131,10 @@ void GameScene::Initialize() {
 	//敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
 
+	//レールカメラの生成
+	railCamera_ = new RailCamera();
+	railCamera_->Initialize(worldTransform_, { 0.00f,0.00f,0.00f });
+
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowHeight, WinApp::kWindowWidth);
 
@@ -156,17 +161,24 @@ void GameScene::Update() {
 	//敵キャラの更新
 	enemy_->Update();
 
+	//レールカメラの更新
+	railCamera_->Update();
+	viewProjection_.matView = railCamera_->GetViewProjection().matView;
+	viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
+	//ビュープロジェクション行列の転送
+	viewProjection_.TransferMatrix();
+
 	//カメラの処理
 	if (isDebugCameraActive_) {
 		//デバッグカメラの更新
 		debugCamera_->Update();
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-		//ビュープロジェクソン行列の転送
+		//ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	}
 	else {
-		//ビュープロジェク諸ン行列の更新と転送
+		//ビュープロジェクション行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
 

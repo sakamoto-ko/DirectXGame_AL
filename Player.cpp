@@ -136,9 +136,10 @@ void Player::Update() {
 	}
 
 	//キャラクターの座標を画面表示する処理
-	/*ImGui::Begin("");
-	ImGui::Text("Player%f, %f", worldTransform_.translation_.x, worldTransform_.translation_.y);
-	ImGui::End();*/
+	ImGui::Begin("Player");
+	ImGui::DragFloat3("Player.translation", &worldTransform_.translation_.x, 0.01f);
+	ImGui::DragFloat3("Player.rotate", &worldTransform_.rotation_.x, 0.01f);
+	ImGui::End();
 }
 
 // 描画

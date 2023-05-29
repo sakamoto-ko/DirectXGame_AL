@@ -46,6 +46,11 @@ void EnemyBullet::Update() {
 	if (--deathTimer_ < ~0) {
 		isDead_ = true;
 	}
+
+	ImGui::Begin("EnemyBullet");
+	ImGui::DragFloat3("EnemyBullet.translation", &worldTransform_.translation_.x, 0.01f);
+	ImGui::DragFloat3("EnemyBullet.rotate", &worldTransform_.rotation_.x, 0.01f);
+	ImGui::End();
 }
 
 // 描画

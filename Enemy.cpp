@@ -123,9 +123,10 @@ void Enemy::Update() {
 	}
 
 	//キャラクターの座標を画面表示する処理
-	/*ImGui::Begin("");
-	ImGui::Text("Enemy%f, %f", worldTransform_.translation_.x, worldTransform_.translation_.y);
-	ImGui::End();*/
+	ImGui::Begin("Enemy");
+	ImGui::DragFloat3("Enemy.translation", &worldTransform_.translation_.x, 0.01f);
+	ImGui::DragFloat3("Enemy.rotate", &worldTransform_.rotation_.x, 0.01f);
+	ImGui::End();
 }
 
 void Enemy::Draw(ViewProjection viewProjection) {

@@ -46,6 +46,11 @@ void PlayerBullet::Update() {
 	if (--deathTimer_ < ~0) {
 		isDead_ = true;
 	}
+
+	ImGui::Begin("PlayerBullet");
+	ImGui::DragFloat3("PlayerBullet.translation", &worldTransform_.translation_.x, 0.01f);
+	ImGui::DragFloat3("PlayerBullet.rotate", &worldTransform_.rotation_.x, 0.01f);
+	ImGui::End();
 }
 
 // 描画

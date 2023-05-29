@@ -60,4 +60,3 @@ public:
 
 	Vector3 GetWorldPosition();
 };
-

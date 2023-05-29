@@ -28,6 +28,8 @@ private:
 	//キーボード入力
 	Input* input_ = nullptr;
 
+	Vector3 kMoveSpeed = {};
+	Vector3 kRotSpeed = {};
 public:
 	RailCamera();
 	~RailCamera();
@@ -40,5 +42,7 @@ public:
 	/// </summary>
 	/// <returns>ビュープロジェクション</returns>
 	const ViewProjection& GetViewProjection() { return viewProjection_; }
+
+	const WorldTransform& GetWorldTransform() { return worldTransform_; }
 };
 

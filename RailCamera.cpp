@@ -15,75 +15,73 @@ void RailCamera::Initialize(WorldTransform worldTransform, Vector3 radian) {
 
 	//シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
+	kMoveSpeed.z = 0.01f;
 }
 //更新
 void RailCamera::Update() {
 	//ワールドトランスフォームの座標の数値を加算したりする(移動)
-	worldTransform_.UpdateMatrix();
 	//X
-	Vector3 kMoveSpeed = {};
 	if (input_->PushKey(DIK_T)) {
-		kMoveSpeed.x = 0.01f;
+		kMoveSpeed.x += 0.01f;
 	}
 	else if (input_->PushKey(DIK_Y)) {
-		kMoveSpeed.x = -0.01f;
+		kMoveSpeed.x += -0.01f;
 	}
 	else {
-		kMoveSpeed.x = 0.0f;
+		kMoveSpeed.x += 0.0f;
 	}
 	//Y
 	if (input_->PushKey(DIK_U)) {
-		kMoveSpeed.y = 0.01f;
+		kMoveSpeed.y += 0.01f;
 	}
 	else if (input_->PushKey(DIK_I)) {
-		kMoveSpeed.y = -0.01f;
+		kMoveSpeed.y += -0.01f;
 	}
 	else {
-		kMoveSpeed.y = 0.0f;
+		kMoveSpeed.y += 0.0f;
 	}
 	//Z
 	if (input_->PushKey(DIK_O)) {
-		kMoveSpeed.z = 0.01f;
+		kMoveSpeed.z += 0.01f;
 	}
 	else if (input_->PushKey(DIK_P)) {
-		kMoveSpeed.z = -0.01f;
+		kMoveSpeed.z += -0.01f;
 	}
 	else {
-		kMoveSpeed.z = 0.0f;
+		kMoveSpeed.z += 0.0f;
 	}
 	worldTransform_.translation_ = Add(worldTransform_.translation_, kMoveSpeed);
 
 	//ワールドトランスフォームの座標の数値を加算したりする(回転)
-	Vector3 kRotSpeed = {};
 	//X
 	if (input_->PushKey(DIK_F)) {
-		kRotSpeed.x = 0.01f;
+		kRotSpeed.x += 0.01f;
 	}
 	else if (input_->PushKey(DIK_G)) {
-		kRotSpeed.x = -0.01f;
+		kRotSpeed.x += -0.01f;
 	}
 	else {
-		kRotSpeed.x = 0.0f;
+		kRotSpeed.x += 0.0f;
 	}
 	//Y
 	if (input_->PushKey(DIK_H)) {
-		kRotSpeed.y = 0.01f;
+		kRotSpeed.y += 0.01f;
 	}
 	else if (input_->PushKey(DIK_J)) {
-		kRotSpeed.y = -0.01f;
+		kRotSpeed.y += -0.01f;
 	}
 	else {
-		kRotSpeed.y = 0.0f;
+		kRotSpeed.y += 0.0f;
 	}
 	//Z
 	if (input_->PushKey(DIK_K)) {
-		kRotSpeed.z = 0.01f;
+		kRotSpeed.z += 0.01f;
 	}
 	else if (input_->PushKey(DIK_L)) {
-		kRotSpeed.z = -0.01f;
+		kRotSpeed.z += -0.01f;
 	}
 	else {
-		kRotSpeed.z = 0.0f;
+		kRotSpeed.z += 0.0f;
 	}
 	worldTransform_.rotation_ = Add(worldTransform_.rotation_, kRotSpeed);
 

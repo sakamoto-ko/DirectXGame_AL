@@ -18,6 +18,8 @@ private:
 	//弾
 	std::list<PlayerBullet*> bullets_;
 	
+	int count_ = 0;
+
 public:
 	Player();
 	~Player();
@@ -36,6 +38,7 @@ public:
 
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
+	const WorldTransform& GetWorldTransform() { return worldTransform_; }
 
 	//衝突を検出したら呼び出されるコールバック関数	
 	void OnCollision();
@@ -43,4 +46,6 @@ public:
 	//弾リストを取得
 	const std::list<PlayerBullet*>& GetBullets() { return bullets_; }
 
+	//親となるトランスフォームをセット
+	void SetParent(const WorldTransform* parent);
 };

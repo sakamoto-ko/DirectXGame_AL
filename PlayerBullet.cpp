@@ -4,9 +4,9 @@ Vector3 PlayerBullet::GetWorldPosition() {
 	//ワールド座標を入れる変数
 	Vector3 worldPos = {};
 	//ワールド行列の平行移動成分を取得(ワールド座標)
-	worldPos.x = worldTransform_.translation_.x;
-	worldPos.y = worldTransform_.translation_.y;
-	worldPos.z = worldTransform_.translation_.z;
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
 }
@@ -24,7 +24,7 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vecto
 	assert(model);
 
 	model_ = model;
-	textureHandle_ = TextureManager::Load("black.png");
+	textureHandle_ = TextureManager::Load("white.jpg");
 
 	worldTransform_.Initialize();
 
@@ -46,11 +46,6 @@ void PlayerBullet::Update() {
 	if (--deathTimer_ < ~0) {
 		isDead_ = true;
 	}
-
-	ImGui::Begin("PlayerBullet");
-	ImGui::DragFloat3("PlayerBullet.translation", &worldTransform_.translation_.x, 0.01f);
-	ImGui::DragFloat3("PlayerBullet.rotate", &worldTransform_.rotation_.x, 0.01f);
-	ImGui::End();
 }
 
 // 描画

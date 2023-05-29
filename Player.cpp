@@ -10,6 +10,17 @@ Player::~Player() {
 	}
 }
 
+Vector3 Player::GetWorldPosition() {
+	//ワールド座標を入れる変数
+	Vector3 worldPos = {};
+	//ワールド行列の平行移動成分を取得(ワールド座標)
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
+}
+
 //旋回
 void Player::Rotate() {
 	//回転速さ[ラジアン/frame]
@@ -26,7 +37,7 @@ void Player::Rotate() {
 
 //攻撃
 void Player::Attack() {
-	if (input_->TriggerKey(DIK_SPACE)) {
+	if (input_->PushKey(DIK_SPACE)) {
 		//自キャラの座標をコピー
 		//DirectX::XMFLOAT3 position = worldTransform_.translation_;
 
@@ -39,26 +50,24 @@ void Player::Attack() {
 
 		//弾を生成し、初期化
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(model_, worldTransform_.translation_, velocity);
+		newBullet->Initialize(
+			model_, 
+			{ worldTransform_.matWorld_.m[3][0],worldTransform_.matWorld_.m[3][1],worldTransform_.matWorld_.m[3][2] }
+		, velocity);
 
 		//弾を登録する
 		bullets_.push_back(newBullet);
 	}
 }
 
-Vector3 Player::GetWorldPosition() {
-	//ワールド座標を入れる変数
-	Vector3 worldPos = {};
-	//ワールド行列の平行移動成分を取得(ワールド座標)
-	worldPos.x = worldTransform_.translation_.x;
-	worldPos.y = worldTransform_.translation_.y;
-	worldPos.z = worldTransform_.translation_.z;
-
-	return worldPos;
-}
-
 void Player::OnCollision() {
 	//何もしない
+}
+
+//親となるトランスフォームをセット
+void Player::SetParent(const WorldTransform* parent) {
+	//親子関係を結ぶ
+	worldTransform_.parent_ = parent;
 }
 
 // 初期化
@@ -69,6 +78,8 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	textureHandle_ = textureHandle;
 
 	worldTransform_.Initialize();
+
+	worldTransform_.translation_.z += 15;
 
 	//シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();

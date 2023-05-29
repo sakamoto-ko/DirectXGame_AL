@@ -34,11 +34,9 @@ void Enemy::Fire() {
 
 	//弾の速度
 	const float kBulletSpeed = 1.0f;
-	//Vector3 velocity(0, 0, kBulletSpeed);
 
 	Vector3 playerPos = player_->GetWorldPosition();
-	Vector3 enemyPos = GetWorldPosition();
-	Vector3 worldPos = Subtract(playerPos, enemyPos);
+	Vector3 worldPos = Subtract(playerPos, worldTransform_.translation_);
 	Vector3 velocity = Normalize(worldPos);
 	velocity.z *= kBulletSpeed;
 
@@ -51,17 +49,6 @@ void Enemy::Fire() {
 
 	//弾を登録する
 	bullets_.push_back(newBullet);
-}
-
-Vector3 Enemy::GetWorldPosition() {
-	//ワールド座標を入れる変数
-	Vector3 worldPos = {};
-	//ワールド行列の平行移動成分を取得(ワールド座標)
-	worldPos.x = worldTransform_.translation_.x;
-	worldPos.y = worldTransform_.translation_.y;
-	worldPos.z = worldTransform_.translation_.z;
-
-	return worldPos;
 }
 
 void Enemy::OnCollision() {

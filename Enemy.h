@@ -63,7 +63,7 @@ public:
 	void SetPlayer(Player* player) { player_ = player; }
 
 	//ワールド座標を取得
-	Vector3 GetWorldPosition();
+	const Vector3& GetWorldPosition() { return worldTransform_.translation_; }
 
 	//発射間隔
 	static const int kFireInterval = 60;

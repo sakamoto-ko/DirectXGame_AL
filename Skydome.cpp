@@ -1,5 +1,10 @@
 ﻿#include "Skydome.h"
 
+#include "MyMath.h"
+
+#include <cassert>
+#include <list>
+
 Skydome::Skydome(){}
 Skydome::~Skydome(){}
 void Skydome::Initialize(Model* model) {

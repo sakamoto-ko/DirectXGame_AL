@@ -1,22 +1,31 @@
 #include "GameScene.h"
+#include <fstream>
+
+#include "MyMath.h"
+
+#include <cassert>
+#include <list>
 
 void GameScene::CheckAllCollisions() {
 	//判定対象AとBの座標
 	Vector3 posA, posB;
 
+	//敵リストの取得
+	//const std::list<Enemy*>& enemies = gameScene_->GetEnemy();
+
 	//自弾リストの取得
 	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
 	//敵弾リストの取得
-	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
+	//const std::list<EnemyBullet*>& enemyBullets = gameScene_->GetBullets();
 
 #pragma region 自キャラと敵弾の当たり判定
 	//自キャラの座標
 	posA = player_->GetWorldPosition();
 
 	//自キャラと敵弾全ての当たり判定
-	for (EnemyBullet* bullet : enemyBullets) {
+	for (EnemyBullet* bullet : enemyBullets_) {
 		//敵弾の座標
-		posB = bullet->GetWorldPosition();
+		posB = bullet->GetWorldTransform();
 
 		//座標AとBの距離を求める
 		//球と球の交差判定
@@ -40,17 +49,19 @@ void GameScene::CheckAllCollisions() {
 
 		//自弾と敵キャラ全ての当たり判定
 		//敵キャラの座標
-		posB = enemy_->GetWorldPosition();
+		for (Enemy* enemy : enemies_) {
+			posB = enemy->GetWorldPosition();
 
-		//座標AとBの距離を求める
-		//球と球の交差判定
-		if (posA.z + playerRadius >= posB.z && posA.z <= posB.z + enemyBulletRadius) {
-			if (posA.y + playerRadius >= posB.y && posA.y <= posB.y + enemyBulletRadius) {
-				if (posA.x + playerRadius >= posB.x && posA.x <= posB.x + enemyBulletRadius) {
-					//自弾の衝突時コールバックを呼び出す
-					bullet->OnCollision();
-					//敵キャラの衝突時コールバックを呼び出す
-					enemy_->OnCollision();
+			//座標AとBの距離を求める
+			//球と球の交差判定
+			if (posA.z + playerRadius >= posB.z && posA.z <= posB.z + enemyBulletRadius) {
+				if (posA.y + playerRadius >= posB.y && posA.y <= posB.y + enemyBulletRadius) {
+					if (posA.x + playerRadius >= posB.x && posA.x <= posB.x + enemyBulletRadius) {
+						//自弾の衝突時コールバックを呼び出す
+						bullet->OnCollision();
+						//敵キャラの衝突時コールバックを呼び出す
+						enemy->OnCollision();
+					}
 				}
 			}
 		}
@@ -64,8 +75,8 @@ void GameScene::CheckAllCollisions() {
 
 		//自弾と敵弾全ての当たり判定
 		//敵弾の座標
-		for (EnemyBullet* enemyBullet : enemyBullets) {
-			posB = enemyBullet->GetWorldPosition();
+		for (EnemyBullet* enemyBullet : enemyBullets_) {
+			posB = enemyBullet->GetWorldTransform();
 
 			//座標AとBの距離を求める
 			//球と球の交差判定
@@ -84,15 +95,118 @@ void GameScene::CheckAllCollisions() {
 #pragma endregion
 }
 
+//敵発生関数
+void GameScene::EnemyPop(Vector3 pos) {
+	//敵を生成し、初期化
+	Enemy* newEnemy = new Enemy();
+	newEnemy->Initialize(model_, textureHandle_, pos);
+	//敵を登録する
+	enemies_.push_back(newEnemy);
+	for (Enemy* enemy : enemies_) {
+		//敵キャラにゲームシーンのアドレスを渡す
+		enemy->SetGameScene(this);
+		//敵キャラに自キャラのアドレスを渡す
+		enemy->SetPlayer(player_);
+		enemy->Update();
+	}
+}
+
+//敵弾を追加する
+void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
+	//リストに登録する
+	enemyBullets_.push_back(enemyBullet);
+}
+
+//敵発生データの読み込み
+void GameScene::LoadEnemyPopData() {
+	//ファイルを開く
+	std::ifstream file;
+	file.open("./Resources/enemyPop.csv");
+	assert(file.is_open());
+
+	//ファイルの内容を文字列ストリームにコピー
+	enemyPopCommands << file.rdbuf();
+
+	//ファイルを閉じる
+	file.close();
+}
+
+//敵発生コマンドの更新
+void GameScene::UpdateEnemyPopCommands() {
+	//待機処理
+	if (isWait) {
+		waitTimer--;
+		if (waitTimer <= 0) {
+			//待機完了
+			isWait = false;
+		}
+		return;
+	}
+
+	//1行文の文字列を入れる変数
+	std::string line;
+
+	//コマンド実行ループ
+	while (getline(enemyPopCommands, line)) {
+		//1行文分の文字列をストリームに変換して解析しやすくする
+		std::istringstream line_stream(line);
+
+		std::string word;
+		//,区切りで行の先頭文字列を取得
+		getline(line_stream, word, ',');
+		//"//"から始まる行はコメント
+		if (word.find("//") == 0) {
+			//コメント行を飛ばす
+			continue;
+		}
+		//POPコマンド
+		if (word.find("POP") == 0) {
+			//X座標
+			getline(line_stream, word, ',');
+			float x = (float)std::atof(word.c_str());
+
+			//Y座標
+			getline(line_stream, word, ',');
+			float y = (float)std::atof(word.c_str());
+
+			//Z座標
+			getline(line_stream, word, ',');
+			float z = (float)std::atof(word.c_str());
+
+			//敵を発生させる
+			EnemyPop(Vector3(x, y, z));
+		}
+		//WAITコマンド
+		else if (word.find("WAIT") == 0) {
+			getline(line_stream, word, ',');
+
+			//待ち時間
+			int32_t waitTime = atoi(word.c_str());
+
+			//待機開始
+			isWait = true;
+			waitTimer = waitTime;
+
+			//コマンドループを抜ける
+			break;//重要
+		}
+	}
+}
+
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete debugCamera_;
-	delete model_;
-	delete player_;
-	delete enemy_;
-	delete modelSkydome_;
 	delete railCamera_;
+	delete model_;
+	delete modelSkydome_;
+	delete player_;
+	for (Enemy* enemy : enemies_) {
+		delete enemy;
+	}
+	for (EnemyBullet* bullet : enemyBullets_) {
+		delete bullet;
+	}
 }
 
 void GameScene::Initialize() {
@@ -103,6 +217,7 @@ void GameScene::Initialize() {
 
 	//ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("mario.jpg");
+
 
 	//3Dモデルの生成
 	model_ = Model::Create();
@@ -123,13 +238,9 @@ void GameScene::Initialize() {
 	//自キャラの初期化
 	player_->Initialize(model_, textureHandle_);
 
-	//敵キャラの生成
-	enemy_ = new Enemy();
-	//敵キャラの初期化
-	enemy_->Initialize(model_, textureHandle_);
-
-	//敵キャラに自キャラのアドレスを渡す
-	enemy_->SetPlayer(player_);
+	//敵発生
+	LoadEnemyPopData();
+	UpdateEnemyPopCommands();
 
 	//レールカメラの生成
 	railCamera_ = new RailCamera();
@@ -186,8 +297,42 @@ void GameScene::Update() {
 	//自キャラの更新
 	player_->Update();
 
+	//敵発生
+	UpdateEnemyPopCommands();
+
 	//敵キャラの更新
-	enemy_->Update();
+	for (Enemy* enemy : enemies_) {
+		enemy->Update();
+	}
+	//デスフラグの立った敵を削除
+	enemies_.remove_if([](Enemy* enemy)
+		{
+			if (enemy->IsDead()) {
+				delete enemy;
+				return true;
+			}
+			else if (enemy->GetWorldPosition().z <= -80) {
+				delete enemy;
+				return true;
+			}
+			return false;
+		}
+	);
+
+	//敵弾の更新
+	for (EnemyBullet* bullet : enemyBullets_) {
+		bullet->Update();
+	}
+	//デスフラグの立った弾を削除
+	enemyBullets_.remove_if([](EnemyBullet* bullet)
+		{
+			if (bullet->IsDead()) {
+				delete bullet;
+				return true;
+			}
+			return false;
+		}
+	);
 
 	CheckAllCollisions();
 }
@@ -222,7 +367,13 @@ void GameScene::Draw() {
 	player_->Draw(viewProjection_);
 
 	//敵キャラの描画
-	enemy_->Draw(viewProjection_);
+	for (Enemy* enemy : enemies_) {
+		enemy->Draw(viewProjection_);
+	}
+	//敵弾描画
+	for (EnemyBullet* bullet : enemyBullets_) {
+		bullet->Draw(viewProjection_);
+	}
 
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる

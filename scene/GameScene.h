@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include "Skydome.h"
 #include "RailCamera.h"
+#include <sstream>
 
 /// <summary>
 /// ゲームシーン
@@ -35,11 +36,23 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	//デバッグカメラ有効
+	bool isDebugCameraActive_ = false;
+
 	//衝突判定と応答
 	void CheckAllCollisions();
 
-	//デバッグカメラ有効
-	bool isDebugCameraActive_ = false;
+	//敵弾を追加する
+	void AddEnemyBullet(EnemyBullet* enemyBullet);
+
+	//敵発生データの読み込み
+	void LoadEnemyPopData();
+
+	//敵発生コマンドの更新
+	void UpdateEnemyPopCommands();
+
+	//敵発生関数
+	void EnemyPop(Vector3 pos);
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -66,13 +79,31 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 
 	//敵キャラ
-	Enemy* enemy_ = nullptr;
+	std::list<Enemy*> enemies_;
+
+	//敵リストを取得
+	const std::list<Enemy*>& GetEnemies() { return enemies_; }
+
+	//敵弾
+	std::list<EnemyBullet*> enemyBullets_;
+
+	//弾リストを取得
+	const std::list<EnemyBullet*>& GetBullets() { return enemyBullets_; }
 
 	//スカイドーム
 	Skydome* skydome_ = nullptr;
 
 	//レールカメラ
 	RailCamera* railCamera_ = nullptr;
+
+	//敵発生コマンド
+	std::stringstream enemyPopCommands;
+
+	//待機中フラグ
+	bool isWait = false;
+	
+	//待機タイマー
+	uint32_t waitTimer = 0;
 
 	/// <summary>
 	/// ゲームシーン用

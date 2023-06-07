@@ -1,6 +1,11 @@
 ﻿#include "EnemyBullet.h"
 
-Vector3 EnemyBullet::GetWorldPosition() {
+#include "MyMath.h"
+
+#include <cassert>
+#include <list>
+
+Vector3 EnemyBullet::GetWorldTransform() {
 	//ワールド座標を入れる変数
 	Vector3 worldPos = {};
 	//ワールド行列の平行移動成分を取得(ワールド座標)

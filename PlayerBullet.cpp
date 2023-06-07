@@ -1,5 +1,10 @@
 #include "PlayerBullet.h"
 
+#include "MyMath.h"
+
+#include <cassert>
+#include <list>
+
 Vector3 PlayerBullet::GetWorldPosition() {
 	//ワールド座標を入れる変数
 	Vector3 worldPos = {};

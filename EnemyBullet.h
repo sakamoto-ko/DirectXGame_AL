@@ -12,11 +12,6 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 
-#include "MyMath.h"
-
-#include <cassert>
-#include <list>
-
 class EnemyBullet
 {
 private:
@@ -58,5 +53,6 @@ public:
 	//衝突を検出したら呼び出されるコールバック関数	
 	void OnCollision();
 
-	Vector3 GetWorldPosition();
+	Vector3 GetWorldTransform();
+	Vector3 GetVelocity() { return velocity_; }
 };

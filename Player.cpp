@@ -1,5 +1,10 @@
 #include "Player.h"
 
+#include "MyMath.h"
+
+#include <cassert>
+#include <list>
+
 Player::Player() {
 
 }

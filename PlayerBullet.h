@@ -12,11 +12,6 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 
-#include "MyMath.h"
-
-#include <cassert>
-#include <list>
-
 class PlayerBullet {
 private:
 	// ワールド変換データ

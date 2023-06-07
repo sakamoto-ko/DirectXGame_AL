@@ -1,9 +1,11 @@
 ﻿#pragma once
 #include "EnemyBullet.h"
-#include "Player.h"
 
 //自機クラスの前方宣言
 class Player;
+
+//GameSceneクラスの前方宣言
+class GameScene;
 
 class Enemy {
 private:
@@ -28,20 +30,31 @@ private:
 	//フェーズ
 	Phase phase_ = Phase::Approach;
 
-	//弾
-	std::list<EnemyBullet*> bullets_;
-
 	//自キャラ
 	Player* player_ = nullptr;
 
+	//弾
+	//std::list<EnemyBullet*> bullets_;
+
+	//弾リストを取得
+	//const std::list<EnemyBullet*>& GetBullets() { return bullets_; }
+
 	//発射タイマー
 	int32_t shotTimer = 0;
+
+	//ゲームシーン
+	GameScene* gameScene_ = nullptr;
+
+	//デスフラグ
+	bool isDead_ = false;
+
+	float move;
 
 public:
 	Enemy();
 	~Enemy();
 	//初期化
-	void Initialize(Model* model, uint32_t textureHandle);
+	void Initialize(Model* model, uint32_t textureHandle, Vector3 pos);
 	//更新
 	void Update();
 	//描画
@@ -62,16 +75,20 @@ public:
 
 	void SetPlayer(Player* player) { player_ = player; }
 
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
 	//ワールド座標を取得
 	const Vector3& GetWorldPosition() { return worldTransform_.translation_; }
 
 	//発射間隔
 	static const int kFireInterval = 60;
 
-	//衝突を検出したら呼び出されるコールバック関数	
+	//衝突を検出したら呼び出されるコールバック関数
 	void OnCollision();
 
 	//弾リストを取得
-	const std::list<EnemyBullet*>& GetBullets() { return bullets_; }
+	//const std::list<EnemyBullet*>& GetBullets() { return bullets_; }
 
+	//
+	bool IsDead() { return isDead_; }
 };

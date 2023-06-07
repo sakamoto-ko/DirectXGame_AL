@@ -1,5 +1,10 @@
 ﻿#include "RailCamera.h"
 
+#include "MyMath.h"
+
+#include <cassert>
+#include <list>
+
 RailCamera::RailCamera(){}
 RailCamera::~RailCamera() {}
 
@@ -15,7 +20,8 @@ void RailCamera::Initialize(WorldTransform worldTransform, Vector3 radian) {
 
 	//シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
-	kMoveSpeed.z = 0.01f;
+	kMoveSpeed.z = 0.0f;
+	//kRotSpeed.y = (1.0f/360.0f);
 }
 //更新
 void RailCamera::Update() {

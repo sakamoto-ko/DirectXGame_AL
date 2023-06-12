@@ -14,7 +14,7 @@ void GameScene::CheckAllCollisions() {
 	//const std::list<Enemy*>& enemies = gameScene_->GetEnemy();
 
 	//自弾リストの取得
-	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
+	//const std::list<PlayerBullet*>& playerBullets = player_->GetEnemyBullets();
 	//敵弾リストの取得
 	//const std::list<EnemyBullet*>& enemyBullets = gameScene_->GetBullets();
 
@@ -44,7 +44,7 @@ void GameScene::CheckAllCollisions() {
 
 #pragma region 自弾と敵キャラの当たり判定
 	//自弾の座標
-	for (PlayerBullet* bullet : playerBullets) {
+	for (PlayerBullet* bullet : playerBullets_) {
 		posA = bullet->GetWorldPosition();
 
 		//自弾と敵キャラ全ての当たり判定
@@ -70,7 +70,7 @@ void GameScene::CheckAllCollisions() {
 
 #pragma region 自弾と敵弾の当たり判定
 	//自弾の座標
-	for (PlayerBullet* playerBullet : playerBullets) {
+	for (PlayerBullet* playerBullet : playerBullets_) {
 		posA = playerBullet->GetWorldPosition();
 
 		//自弾と敵弾全ての当たり判定
@@ -109,6 +109,12 @@ void GameScene::EnemyPop(Vector3 pos) {
 		enemy->SetPlayer(player_);
 		enemy->Update();
 	}
+}
+
+//敵弾を追加する
+void GameScene::AddPlayerBullet(PlayerBullet* playerBullet) {
+	//リストに登録する
+	playerBullets_.push_back(playerBullet);
 }
 
 //敵弾を追加する
@@ -207,6 +213,10 @@ GameScene::~GameScene() {
 	for (EnemyBullet* bullet : enemyBullets_) {
 		delete bullet;
 	}
+	//bullet_の開放
+	for (PlayerBullet* bullet : playerBullets_) {
+		delete bullet;
+	}
 }
 
 void GameScene::Initialize() {
@@ -217,7 +227,7 @@ void GameScene::Initialize() {
 
 	//ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("mario.jpg");
-
+	textureHandleReticle_ = TextureManager::Load("reticle.png");
 
 	//3Dモデルの生成
 	model_ = Model::Create();
@@ -235,8 +245,10 @@ void GameScene::Initialize() {
 
 	//自キャラの生成
 	player_ = new Player();
+	//敵キャラにゲームシーンのアドレスを渡す
+	player_->SetGameScene(this);
 	//自キャラの初期化
-	player_->Initialize(model_, textureHandle_);
+	player_->Initialize(model_, textureHandle_, textureHandleReticle_);
 
 	//敵発生
 	LoadEnemyPopData();
@@ -295,7 +307,21 @@ void GameScene::Update() {
 	}
 
 	//自キャラの更新
-	player_->Update();
+	player_->Update(viewProjection_);
+
+	//弾更新
+	for (PlayerBullet* bullet : playerBullets_) {
+		bullet->Update();
+	}
+	//デスフラグの立った弾を削除
+	playerBullets_.remove_if([](PlayerBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+		}
+	);
 
 	//敵発生
 	UpdateEnemyPopCommands();
@@ -366,10 +392,16 @@ void GameScene::Draw() {
 	//自キャラの描画
 	player_->Draw(viewProjection_);
 
+	//弾描画
+	for (PlayerBullet* bullet : playerBullets_) {
+		bullet->Draw(viewProjection_);
+	}
+
 	//敵キャラの描画
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw(viewProjection_);
 	}
+
 	//敵弾描画
 	for (EnemyBullet* bullet : enemyBullets_) {
 		bullet->Draw(viewProjection_);
@@ -390,6 +422,8 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+
+	player_->DrawUI();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

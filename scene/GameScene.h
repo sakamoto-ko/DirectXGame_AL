@@ -42,6 +42,9 @@ public: // メンバ関数
 	//衝突判定と応答
 	void CheckAllCollisions();
 
+	//自弾を追加する
+	void AddPlayerBullet(PlayerBullet* playerBullet);
+
 	//敵弾を追加する
 	void AddEnemyBullet(EnemyBullet* enemyBullet);
 
@@ -74,9 +77,16 @@ private: // メンバ変数
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
+	uint32_t textureHandleReticle_ = 0;
 
 	//自キャラ
 	Player* player_ = nullptr;
+
+	//自弾
+	std::list<PlayerBullet*> playerBullets_;
+
+	//弾リストを取得
+	const std::list<PlayerBullet*>& GetPlayerBullets() { return playerBullets_; }
 
 	//敵キャラ
 	std::list<Enemy*> enemies_;
@@ -88,7 +98,7 @@ private: // メンバ変数
 	std::list<EnemyBullet*> enemyBullets_;
 
 	//弾リストを取得
-	const std::list<EnemyBullet*>& GetBullets() { return enemyBullets_; }
+	const std::list<EnemyBullet*>& GetEnemyBullets() { return enemyBullets_; }
 
 	//スカイドーム
 	Skydome* skydome_ = nullptr;

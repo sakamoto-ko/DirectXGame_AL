@@ -25,14 +25,18 @@ void Enemy::ApproachUpdate() {
 	//移動(ベクトルを加算)
 	worldTransform_.translation_ = Add(worldTransform_.translation_, { 0.0f,0.0f,move });
 	//基底の位置に到達したら離脱
-	if (worldTransform_.translation_.z < 0.0f) {
+	if (worldTransform_.translation_.z < 50.0f) {
 		phase_ = Phase::Leave;
 	}
 }
 
 void Enemy::LeaveUpdate() {
 	//移動(ベクトルを加算)
-	worldTransform_.translation_ = Add(worldTransform_.translation_, { move,-move,move });
+	worldTransform_.translation_ = Add(worldTransform_.translation_, { 0.0f,0.0f,-move });
+	//既定の位置に到達したら接近
+	if (worldTransform_.translation_.z > 100.0f) {
+		phase_ = Phase::Approach;
+	}
 }
 
 void Enemy::Fire() {

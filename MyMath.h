@@ -5,6 +5,7 @@
 #include "Matrix4x4.h"
 #include <cmath>
 
+#include <cassert>
 const float playerRadius = 2.0f;
 const float enemyRadius = 2.0f;
 const float playerBulletRadius = 2.0f;
@@ -14,8 +15,8 @@ const float enemyBulletRadius = 2.0f;
 Vector3 Add(const Vector3& v1, const Vector3& v2);
 // 減算
 Vector3 Subtract(const Vector3& v1, const Vector3& v2);
-//// スカラー倍
-//Vector3 Multiply(float scalar, const Vector3& v);
+// スカラー倍
+Vector3 Multiply(const float scalar, const Vector3& v);
 // 内積
 float Dot(const Vector3& v1, const Vector3& v2);
 // 長さ
@@ -23,10 +24,10 @@ float Length(const Vector3& v);
 // 正規化
 Vector3 Normalize(const Vector3& v);
 
-//// 加算
-//Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2);
-//// 減算
-//Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2);
+// 加算
+Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2);
+// 減算
+Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2);
 // 積
 Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
 
@@ -53,3 +54,10 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
 //逆行列
 Matrix4x4 Inverse(const Matrix4x4& m);
+
+//ベクトルと行列の積
+Vector3 Multiply(Vector3 v, Matrix4x4 m);
+// ベクトルと行列の加算
+//Vector3 Add(Vector3 v, Matrix4x4 m);
+//ビューポート変換行列
+Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);

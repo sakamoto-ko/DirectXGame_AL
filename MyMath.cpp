@@ -319,6 +319,7 @@ Matrix4x4 Inverse(const Matrix4x4& m) {
 		m.m[0][1] * m.m[1][3] * m.m[2][2] * m.m[3][0];
 
 	float lal = sqrtf(a * a);
+	//lal = abs(a);
 
 	result.m[0][0] = (
 		m.m[1][1] * m.m[2][2] * m.m[3][3] +

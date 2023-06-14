@@ -51,7 +51,7 @@ public:
 
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
-	Vector3 GetReticleWorldPosition();
+
 	const WorldTransform& GetWorldTransform() { return worldTransform_; }
 
 	//衝突を検出したら呼び出されるコールバック関数	
@@ -67,4 +67,13 @@ public:
 	void DrawUI();
 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
+	//自機のワールド座標から3Dレティクルのワールド座標を計算
+	void Get3DReticleWorldPosition();
+
+	//3Dレティクルもワールド座標から2Dレティクルのスクリーン座標を計算
+	//void Convert3Dto2DCoord(const ViewProjection viewProjection);
+
+	//マウスカーソルのスクリーン座標からワールド座標を取得して3Dレティクル配置
+	void GetMouseWorldPosition(const ViewProjection viewProjection);
 };

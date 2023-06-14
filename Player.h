@@ -30,6 +30,9 @@ private:
 	
 	int count_ = 0;
 
+	//デスフラグ
+	bool isDead_ = false;
+
 	//ゲームシーン
 	GameScene* gameScene_ = nullptr;
 
@@ -48,6 +51,8 @@ public:
 
 	//攻撃
 	void Attack();
+
+	void Shot();
 
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
@@ -76,4 +81,7 @@ public:
 
 	//マウスカーソルのスクリーン座標からワールド座標を取得して3Dレティクル配置
 	void GetMouseWorldPosition(const ViewProjection viewProjection);
+
+	//
+	bool IsDead() { return isDead_; }
 };

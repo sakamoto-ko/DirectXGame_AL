@@ -39,6 +39,31 @@ void Player::Rotate() {
 	}
 }
 
+void Player::Shot() {
+	assert(gameScene_);
+
+	//弾の速度
+	const float kBulletSpeed = 1.0f;
+	Vector3 velocity(0, 0, kBulletSpeed);
+
+	//速度ベクトルを自機の向きに合わせて回転させる
+	//velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+
+	//自機から照準オブジェクトへのベクトル
+	velocity = Subtract(worldTransform3DReticle_.translation_, worldTransform_.translation_);
+	velocity = Multiply(kBulletSpeed, Normalize(velocity));
+
+	//弾を生成し、初期化
+	PlayerBullet* newBullet = new PlayerBullet();
+	newBullet->Initialize(
+		model_,
+		{ worldTransform_.matWorld_.m[3][0],worldTransform_.matWorld_.m[3][1],worldTransform_.matWorld_.m[3][2] }
+	, velocity);
+
+	//弾をゲームシーンに登録する
+	gameScene_->AddPlayerBullet(newBullet);
+}
+
 //攻撃
 void Player::Attack() {
 	assert(gameScene_);
@@ -53,55 +78,18 @@ void Player::Attack() {
 	//Rトリガーを押していたら
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
 		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
-			//弾の速度
-			const float kBulletSpeed = 1.0f;
-			Vector3 velocity(0, 0, kBulletSpeed);
-
-			//速度ベクトルを自機の向きに合わせて回転させる
-			//velocity = TransformNormal(velocity, worldTransform_.matWorld_);
-
-			//自機から照準オブジェクトへのベクトル
-			velocity = Subtract(worldTransform3DReticle_.translation_, worldTransform_.translation_);
-			velocity = Multiply(kBulletSpeed, Normalize(velocity));
-
-			//弾を生成し、初期化
-			PlayerBullet* newBullet = new PlayerBullet();
-			newBullet->Initialize(
-				model_,
-				{ worldTransform_.matWorld_.m[3][0],worldTransform_.matWorld_.m[3][1],worldTransform_.matWorld_.m[3][2] }
-			, velocity);
-
-			//弾をゲームシーンに登録する
-			gameScene_->AddPlayerBullet(newBullet);
+			Shot();
 		}
 	}
 	else if (input_->PushKey(DIK_SPACE) ||
 		input_->IsPressMouse(0)) {
-		//弾の速度
-		const float kBulletSpeed = 1.0f;
-		Vector3 velocity(0, 0, kBulletSpeed);
-
-		//速度ベクトルを自機の向きに合わせて回転させる
-		//velocity = TransformNormal(velocity, worldTransform_.matWorld_);
-
-		//自機から照準オブジェクトへのベクトル
-		velocity = Subtract(worldTransform3DReticle_.translation_, worldTransform_.translation_);
-		velocity = Multiply(kBulletSpeed, Normalize(velocity));
-
-		//弾を生成し、初期化
-		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(
-			model_,
-			{ worldTransform_.matWorld_.m[3][0],worldTransform_.matWorld_.m[3][1],worldTransform_.matWorld_.m[3][2] }
-		, velocity);
-
-		//弾をゲームシーンに登録する
-		gameScene_->AddPlayerBullet(newBullet);
+		Shot();
 	}
 }
 
 void Player::OnCollision() {
-	//何もしない
+	//死ぬ
+	isDead_ = true;
 }
 
 //親となるトランスフォームをセット

@@ -18,14 +18,16 @@ void Enemy::ApproachUpdate() {
 	//指定時間に達した
 	if (shotTimer <= 0) {
 		//弾を発射
-		Fire();
+		if (!player_->IsDead()) {
+			Fire();
+		}
 		//発射タイマーを初期化
 		shotTimer = kFireInterval;
 	}
 	//移動(ベクトルを加算)
 	worldTransform_.translation_ = Add(worldTransform_.translation_, { 0.0f,0.0f,move });
 	//基底の位置に到達したら離脱
-	if (worldTransform_.translation_.z < 50.0f) {
+	if (worldTransform_.translation_.z < 30.0f) {
 		phase_ = Phase::Leave;
 	}
 }
@@ -48,11 +50,10 @@ void Enemy::Fire() {
 
 	Vector3 playerPos = player_->GetWorldPosition();
 	Vector3 worldPos = Subtract(playerPos, worldTransform_.translation_);
-	Vector3 velocity = Normalize(worldPos);
-	velocity.z *= kBulletSpeed;
+	Vector3 velocity = { Normalize(worldPos).x,Normalize(worldPos).y,Normalize(worldPos).z * kBulletSpeed };
 
 	//速度ベクトルを自機の向きに合わせて回転させる
-	velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+	//velocity = TransformNormal(velocity, worldTransform_.matWorld_);
 
 	//弾を生成し、初期化
 	EnemyBullet* newBullet = new EnemyBullet();

@@ -50,6 +50,12 @@ private:
 
 	float move;
 
+	//メンバ関数ポインタ
+	void (Enemy::* pFunc)();
+
+	//メンバ関数ポインタのテーブル
+	static void (Enemy::* spFuncTable[])();
+
 public:
 	Enemy();
 	~Enemy();

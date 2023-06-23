@@ -40,6 +40,7 @@ void RailCamera::Update() {
 			kMoveSpeed.z += 0.0f;
 		}
 	}*/
+	//kMoveSpeed.z = 0.01f;
 	worldTransform_.translation_ = Add(worldTransform_.translation_, kMoveSpeed);
 
 	//ワールドトランスフォームの座標の数値を加算したりする(回転)
@@ -55,7 +56,7 @@ void RailCamera::Update() {
 			kRotSpeed.z += 0.0f;
 		}
 	}*/
-
+	//kRotSpeed.x = 0.01f;
 	worldTransform_.rotation_ = Add(worldTransform_.rotation_, kRotSpeed);
 
 	//ワールドトランスフォームのワールド座標再計算

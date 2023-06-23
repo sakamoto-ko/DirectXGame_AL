@@ -7,6 +7,12 @@
 #include <cassert>
 #include <list>
 
+//staticで宣言したメンバ関数ポインタテーブルの実体
+void (Enemy::* Enemy::spFuncTable[])() = {
+	&Enemy::ApproachUpdate,
+	&Enemy::LeaveUpdate,
+};
+
 void Enemy::ApproachInit() {
 	//発射タイマーを初期化
 	shotTimer = kFireInterval;
@@ -92,47 +98,16 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle, Vector3 pos) {
 
 	//接近フェーズ初期化
 	ApproachInit();
+	//メンバ関数ポインタに関数のアドレスを代入する
+	pFunc = &Enemy::ApproachUpdate;
 }
 
 void Enemy::Update() {
-	//デスフラグの立った弾を削除
-	/*bullets_.remove_if([](EnemyBullet* bullet)
-		{
-			if (bullet->IsDead()) {
-				delete bullet;
-				return true;
-			}
-			return false;
-		}
-	);*/
+	//メンバ関数ポインタに入っている関数を呼び出す
+	(this->*spFuncTable[static_cast<size_t>(phase_)])();
 
 	//WorldTransformの更新
 	worldTransform_.UpdateMatrix();
-
-	switch (phase_) {
-	case Phase::Approach:
-	default:
-		ApproachUpdate();
-		break;
-
-	case Phase::Leave:
-		LeaveUpdate();
-		break;
-	}
-
-	if (input_->TriggerKey(DIK_M)) {
-		if (move < 0.0f) {
-			move = 0.0f;
-		}
-		else {
-			move = -0.3f;
-		}
-	}
-
-	//弾更新
-	/*for (EnemyBullet* bullet : bullets_) {
-		bullet->Update();
-	}*/
 
 	//キャラクターの座標を画面表示する処理
 	ImGui::Begin("Enemy");
@@ -143,8 +118,4 @@ void Enemy::Update() {
 
 void Enemy::Draw(ViewProjection viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
-	//弾描画
-	/*for (EnemyBullet* bullet : bullets_) {
-		bullet->Draw(viewProjection);
-	}*/
 }

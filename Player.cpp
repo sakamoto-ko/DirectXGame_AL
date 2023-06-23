@@ -89,7 +89,7 @@ void Player::Attack() {
 
 void Player::OnCollision() {
 	//死ぬ
-	isDead_ = true;
+	//isDead_ = true;
 }
 
 //親となるトランスフォームをセット
@@ -155,6 +155,7 @@ void Player::GetMouseWorldPosition(const ViewProjection viewProjection) {
 	else {
 		//マウス座標を2Dレティクルのスプライトに代入する
 		spritePosition = { (float)mousePosition.x, (float)mousePosition.y };
+		sprite2DReticle_->SetPosition(spritePosition);
 	}
 
 	//ビューポート行列
@@ -169,7 +170,7 @@ void Player::GetMouseWorldPosition(const ViewProjection viewProjection) {
 	Vector3 posNear = Vector3(spritePosition.x, spritePosition.y, 0);
 	Vector3 posFar = Vector3(spritePosition.x, spritePosition.y, 1);
 
-	//スクリーン座標系からサールド座標系へ
+	//スクリーン座標系からワールド座標系へ
 	posNear = TransformNormal(posNear, matInverseVPV);
 	posFar = TransformNormal(posFar, matInverseVPV);
 
@@ -185,7 +186,6 @@ void Player::GetMouseWorldPosition(const ViewProjection viewProjection) {
 
 	//worldTransform3DReticle_のワールド行列更新と転送
 	worldTransform3DReticle_.UpdateMatrix();
-	sprite2DReticle_->SetPosition(Vector2(spritePosition.x, spritePosition.y));
 
 	//キャラクターの座標を画面表示する処理
 	ImGui::Begin("Player");

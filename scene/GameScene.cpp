@@ -4,15 +4,11 @@
 #include "ImGuiManager.h"
 #include "PrimitiveDrawer.h"
 #include "AxisIndicator.h"
+#include "MyMath.h"
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {
-	// デストラクタ
-	delete sprite_;
-	delete model_;
-	delete debugCamera_;
-}
+GameScene::~GameScene() {}
 
 void GameScene::Initialize() {
 
@@ -23,7 +19,7 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::Load("mario.jpg");
 
 	//3Dモデルの生成
-	model_ = Model::Create();
+	model_.reset(Model::Create());
 
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
@@ -39,6 +35,9 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetVisible(true);
 	//軸方向が参照するビュープロジェクションを指定する(アドレスなし)
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
+
+	player_ = std::make_unique<Player>();
+	player_->Initialize(model_.get(), textureHandle_);
 }
 
 void GameScene::Update() {
@@ -46,6 +45,8 @@ void GameScene::Update() {
 	if (isDebugCameraActive_) {
 		debugCamera_->Update();
 	}
+
+	player_->Update();
 }
 
 void GameScene::Draw() {
@@ -74,6 +75,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+	player_->Draw(viewProjection_);
 	
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

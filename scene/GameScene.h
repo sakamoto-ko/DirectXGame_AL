@@ -2,13 +2,11 @@
 
 #include "Audio.h"
 #include "DirectXCommon.h"
-#include "Input.h"
-#include "Model.h"
 #include "SafeDelete.h"
-#include "Sprite.h"
-#include "ViewProjection.h"
-#include "WorldTransform.h"
 #include "DebugCamera.h"
+#include <memory>
+
+#include "Player.h"
 
 /// <summary>
 /// ゲームシーン
@@ -55,7 +53,7 @@ private: // メンバ変数
 	Sprite* sprite_ = nullptr;
 
 	//3Dモデル
-	Model* model_ = nullptr;
+	std::unique_ptr <Model> model_ = nullptr;
 
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
@@ -66,7 +64,5 @@ private: // メンバ変数
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
 
-	/// <summary>
-	/// ゲームシーン用
-	/// </summary>
+	std::unique_ptr<Player> player_;
 };

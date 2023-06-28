@@ -18,7 +18,6 @@ void GameScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
-	audio_ = Audio::GetInstance();
 
 	//ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("mario.jpg");
@@ -28,6 +27,7 @@ void GameScene::Initialize() {
 
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
+
 	//ビュープロジェクションの初期化
 	viewProjection_.farZ = 10000.0f;
 	viewProjection_.Initialize();

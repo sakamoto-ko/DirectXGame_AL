@@ -40,7 +40,7 @@ void RailCamera::Update() {
 			kMoveSpeed.z += 0.0f;
 		}
 	}*/
-	//kMoveSpeed.z = 0.01f;
+	kMoveSpeed.z = 0.01f;
 	worldTransform_.translation_ = Add(worldTransform_.translation_, kMoveSpeed);
 
 	//ワールドトランスフォームの座標の数値を加算したりする(回転)

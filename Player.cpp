@@ -180,7 +180,7 @@ void Player::GetMouseWorldPosition(const ViewProjection viewProjection) {
 
 	//カメラから照準オブジェクトの距離
 	const float kDistanceTestObject = 50.0f;
-	worldTransform3DReticle_.translation_ = Multiply(kDistanceTestObject, mouseDirection);
+	worldTransform3DReticle_.translation_ = Add(posNear, Multiply(kDistanceTestObject, mouseDirection));
 	//spritePosition.x = Multiply(kDistanceTestObject, mouseDirection).x;
 	//spritePosition.y = Multiply(kDistanceTestObject, mouseDirection).y;
 

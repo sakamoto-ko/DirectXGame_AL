@@ -43,7 +43,9 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 	//デバッグカメラの更新
-	debugCamera_->Update();
+	if (isDebugCameraActive_) {
+		debugCamera_->Update();
+	}
 }
 
 void GameScene::Draw() {

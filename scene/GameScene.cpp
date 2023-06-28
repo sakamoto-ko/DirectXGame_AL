@@ -23,34 +23,22 @@ void GameScene::Initialize() {
 	//ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("mario.jpg");
 
-	//スプライトの生成
-	sprite_ = Sprite::Create(textureHandle_, {100, 50});
-
 	//3Dモデルの生成
 	model_ = Model::Create();
 
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	//ビュープロジェクションの初期化
+	viewProjection_.farZ = 10000.0f;
 	viewProjection_.Initialize();
 
-	//サウンドデータの読み込み
-	soundDataHandle_ = audio_->LoadWave("fanfare.wav");
-
-	//音声再生
-	audio_->PlayWave(soundDataHandle_);
-	voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
-
-	//ライン描画が参照するビュープロジェクションを指定する(アドレス渡し)
-	PrimitiveDrawer::GetInstance()->SetViewProjection(&viewProjection_);
-
 	//デバッグカメラの生成
-	debugCamera_ = new DebugCamera(1280, 720);
+	debugCamera_ = new DebugCamera(WinApp::kWindowHeight, WinApp::kWindowWidth);
 
-	//軸方向表示を有効にする
+	//軸方向の表示を有効にする
 	AxisIndicator::GetInstance()->SetVisible(true);
-	//軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
-	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
+	//軸方向が参照するビュープロジェクションを指定する(アドレスなし)
+	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 }
 
 void GameScene::Update() {

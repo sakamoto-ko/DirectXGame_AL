@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "Player.h"
+#include "Skydome.h"
 
 /// <summary>
 /// ゲームシーン
@@ -65,4 +66,6 @@ private: // メンバ変数
 	DebugCamera* debugCamera_ = nullptr;
 
 	std::unique_ptr<Player> player_;
+
+	std::unique_ptr<Skydome> skydome_;
 };

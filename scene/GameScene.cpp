@@ -49,6 +49,8 @@ void GameScene::Update() {
 		debugCamera_->Update();
 	}
 
+	skydome_->Update();
+
 	player_->Update();
 }
 
@@ -78,6 +80,9 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+	
+	skydome_->Draw(viewProjection_);
+
 	player_->Draw(viewProjection_);
 	
 	// 3Dオブジェクト描画後処理

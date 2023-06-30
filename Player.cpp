@@ -20,6 +20,21 @@ void Player::Initialize(Model* model) {
 }
 
 void Player::Update() {
+	//ゲームパッドの状態を得る変数(XINPUT)
+	XINPUT_STATE joyState;
+
+	//ジョイスティック状態取得
+	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
+		//速さ
+		const float speed = 0.3f;
+		//移動量
+		Vector3 move = { (float)joyState.Gamepad.sThumbLX / SHRT_MAX, 0.0f, (float)joyState.Gamepad.sThumbLY / SHRT_MAX };
+		//移動量に速さを反映
+		move = Multiply(speed, Normalize(move));
+		//移動
+		worldTransform_.translation_ = Add(worldTransform_.translation_, move);
+	}
+
 	worldTransform_.UpdateMatrix();
 
 	ImGui::Begin("Player");

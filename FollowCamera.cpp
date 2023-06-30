@@ -9,5 +9,12 @@ void FollowCamera::Initialize(WorldTransform worldTransform, Vector3 radian) {
 }
 //更新
 void FollowCamera::Update() {
+	//追従対象がいれば
+	if (target_) {
+		//追従対象からカメラまでのオフセット
+		Vector3 offset = { 0.0f,2.0f,-10.0f };
 
+		//座標をコピーしてp布施ッと分ずらす
+		viewProjection_.translation_ = Add(target_->translation_, offset);
+	}
 }

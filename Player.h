@@ -21,10 +21,9 @@ private:
 public:
 	Player();
 	~Player();
-
 	void Initialize(Model* model);
-
 	void Update();
-
 	void Draw(ViewProjection& viewProjection);
+
+	const WorldTransform& GetWorldTransform() { return worldTransform_; }
 };

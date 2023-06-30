@@ -6,10 +6,6 @@
 #include <cmath>
 
 #include <cassert>
-const float playerRadius = 2.0f;
-const float enemyRadius = 2.0f;
-const float playerBulletRadius = 2.0f;
-const float enemyBulletRadius = 2.0f;
 
 // 加算
 Vector3 Add(const Vector3& v1, const Vector3& v2);

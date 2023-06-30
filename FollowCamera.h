@@ -22,10 +22,10 @@ public:
 	FollowCamera();
 	~FollowCamera();
 	//初期化
-	void Initialize(WorldTransform worldTransform, Vector3 radian);
+	void Initialize();
 	//更新
 	void Update();
 	const ViewProjection& GetViewProjection() { return viewProjection_; }
-	const SetTarget(const WorldTransform* target) { target_ = target; }
+	const void SetTarget(const WorldTransform* target) { target_ = target; }
 };
 

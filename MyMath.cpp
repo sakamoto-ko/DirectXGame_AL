@@ -515,3 +515,13 @@ Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, f
 
 	return result;
 }
+
+Vector3 Add(Vector3 v1, Vector3 v2) {
+	Vector3 result;
+	result = {
+		v1.x + v2.x,
+		v1.y + v2.y,
+		v1.z + v2.z
+	};
+	return result;
+}

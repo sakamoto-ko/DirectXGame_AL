@@ -61,3 +61,6 @@ Vector3 Multiply(Vector3 v, Matrix4x4 m);
 //Vector3 Add(Vector3 v, Matrix4x4 m);
 //ビューポート変換行列
 Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);
+
+//ベクトルとベクトルの加算
+Vector3 Add(Vector3 v1, Vector3 v2);

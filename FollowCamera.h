@@ -13,6 +13,15 @@
 #include "WorldTransform.h"
 class FollowCamera
 {
-
+private:
+	//ビュープロジェクション
+	ViewProjection viewProjection_;
+public:
+	FollowCamera();
+	~FollowCamera();
+	//初期化
+	void Initialize(WorldTransform worldTransform, Vector3 radian);
+	//更新
+	void Update();
 };
 

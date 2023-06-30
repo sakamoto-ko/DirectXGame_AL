@@ -22,6 +22,8 @@ void GameScene::Initialize() {
 	model_.reset(Model::Create());
 
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	modelGround_ = Model::CreateFromOBJ("ground", true);
+	modelPlayer_ = Model::CreateFromOBJ("player", true);
 
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
@@ -39,10 +41,13 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 
 	player_ = std::make_unique<Player>();
-	player_->Initialize(model_.get(), textureHandle_);
+	player_->Initialize(modelPlayer_);
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelSkydome_);
+
+	ground_ = std::make_unique<Ground>();
+	ground_->Initialize(modelGround_);
 }
 
 void GameScene::Update() {
@@ -67,6 +72,7 @@ void GameScene::Update() {
 	}
 
 	skydome_->Update();
+	ground_->Update();
 
 	player_->Update();
 }
@@ -99,6 +105,7 @@ void GameScene::Draw() {
 	/// </summary>
 	
 	skydome_->Draw(viewProjection_);
+	ground_->Draw(viewProjection_);
 
 	player_->Draw(viewProjection_);
 	

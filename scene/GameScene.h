@@ -8,6 +8,7 @@
 
 #include "Player.h"
 #include "Skydome.h"
+#include "Ground.h"
 
 /// <summary>
 /// ゲームシーン
@@ -57,6 +58,8 @@ private: // メンバ変数
 	std::unique_ptr <Model> model_ = nullptr;
 
 	Model* modelSkydome_ = nullptr;
+	Model* modelGround_ = nullptr;
+	Model* modelPlayer_ = nullptr;
 
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
@@ -70,4 +73,6 @@ private: // メンバ変数
 	std::unique_ptr<Player> player_;
 
 	std::unique_ptr<Skydome> skydome_;
+
+	std::unique_ptr<Ground> ground_;
 };

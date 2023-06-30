@@ -21,6 +21,8 @@ void GameScene::Initialize() {
 	//3Dモデルの生成
 	model_.reset(Model::Create());
 
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 
@@ -40,7 +42,7 @@ void GameScene::Initialize() {
 	player_->Initialize(model_.get(), textureHandle_);
 
 	skydome_ = std::make_unique<Skydome>();
-	skydome_->Initialize(model_.get());
+	skydome_->Initialize(modelSkydome_);
 }
 
 void GameScene::Update() {

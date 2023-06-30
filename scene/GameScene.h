@@ -56,6 +56,8 @@ private: // メンバ変数
 	//3Dモデル
 	std::unique_ptr <Model> model_ = nullptr;
 
+	Model* modelSkydome_ = nullptr;
+
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
 

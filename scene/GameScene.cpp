@@ -51,6 +51,8 @@ void GameScene::Initialize() {
 
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
+	//自キャラのワールドトランスフォームを追従カメラにセット
+	followCamera_->SetTarget(&player_->GetWorldTransform());
 }
 
 void GameScene::Update() {

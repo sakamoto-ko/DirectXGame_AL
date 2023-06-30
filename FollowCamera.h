@@ -16,6 +16,8 @@ class FollowCamera
 private:
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
+	//追従対象
+	const WorldTransform* target_ = nullptr;
 public:
 	FollowCamera();
 	~FollowCamera();
@@ -23,5 +25,7 @@ public:
 	void Initialize(WorldTransform worldTransform, Vector3 radian);
 	//更新
 	void Update();
+	const ViewProjection& GetViewProjection() { return viewProjection_; }
+	const SetTarget(const WorldTransform* target) { target_ = target; }
 };
 

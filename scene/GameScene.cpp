@@ -58,7 +58,12 @@ void GameScene::Update() {
 	}
 #endif
 	if (isDebugCameraActive_) {
+		//デバッグカメラの更新
 		debugCamera_->Update();
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		//ビュープロジェクション行列の転送
+		viewProjection_.TransferMatrix();
 	}
 
 	skydome_->Update();

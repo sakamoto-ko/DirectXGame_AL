@@ -20,18 +20,18 @@ void Player::Initialize(Model* model) {
 }
 
 void Player::Update() {
-	//ƒQ[ƒ€ƒpƒbƒh‚Ìó‘Ô‚ğ“¾‚é•Ï”(XINPUT)
+	//ã‚²ãƒ¼ãƒ ãƒ‘ãƒƒãƒ‰ã®çŠ¶æ…‹ã‚’å¾—ã‚‹å¤‰æ•°(XINPUT)
 	XINPUT_STATE joyState;
 
-	//ƒWƒ‡ƒCƒXƒeƒBƒbƒNó‘Ôæ“¾
+	//ã‚¸ãƒ§ã‚¤ã‚¹ãƒ†ã‚£ãƒƒã‚¯çŠ¶æ…‹å–å¾—
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
-		//‘¬‚³
+		//é€Ÿã•
 		const float speed = 0.3f;
-		//ˆÚ“®—Ê
+		//ç§»å‹•é‡
 		Vector3 move = { (float)joyState.Gamepad.sThumbLX / SHRT_MAX, 0.0f, (float)joyState.Gamepad.sThumbLY / SHRT_MAX };
-		//ˆÚ“®—Ê‚É‘¬‚³‚ğ”½‰f
+		//ç§»å‹•é‡ã«é€Ÿã•ã‚’åæ˜ 
 		move = Multiply(speed, Normalize(move));
-		//ˆÚ“®
+		//ç§»å‹•
 		worldTransform_.translation_ = Add(worldTransform_.translation_, move);
 	}
 

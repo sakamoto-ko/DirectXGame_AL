@@ -18,6 +18,9 @@ private:
 	Model* model_ = nullptr;
 	uint32_t textureHandle_ = 0u;
 
+	//カメラのビュー往路じぇくション
+	const ViewProjection* viewProjection_ = nullptr;
+
 public:
 	Player();
 	~Player();
@@ -27,4 +30,6 @@ public:
 	void DrawA(ViewProjection& viewProjection);
 
 	const WorldTransform& GetWorldTransform() { return worldTransform_; }
+
+	void SetViewPRojection(const ViewProjection* viewProjection) { viewProjection_ = viewProjection; }
 };

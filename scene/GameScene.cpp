@@ -40,17 +40,21 @@ void GameScene::Initialize() {
 	//軸方向が参照するビュープロジェクションを指定する(アドレスなし)
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 
-	player_ = std::make_unique<Player>();
-	player_->Initialize(model_.get(), textureHandle_);
-
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelSkydome_);
 
 	ground_ = std::make_unique<Ground>();
 	ground_->Initialize(modelGround_);
 
+	player_ = std::make_unique<Player>();
+	player_->Initialize(model_.get(), textureHandle_);
+
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
+
+	//カメラのビュープロジェクションを自キャラにコピー
+	player_->SetViewPRojection(&followCamera_->GetViewProjection());
+
 	//自キャラのワールドトランスフォームを追従カメラにセット
 	followCamera_->SetTarget(&player_->GetWorldTransform());
 }

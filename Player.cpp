@@ -29,9 +29,16 @@ void Player::Update() {
 		//速さ
 		const float speed = 0.3f;
 		//移動量
-		Vector3 move = { (float)joyState.Gamepad.sThumbLX / SHRT_MAX, 0.0f, (float)joyState.Gamepad.sThumbLY / SHRT_MAX };
+		Vector3 move = { 
+			(float)joyState.Gamepad.sThumbLX / SHRT_MAX, 
+			0.0f, 
+			(float)joyState.Gamepad.sThumbLY / SHRT_MAX 
+		};
 		//移動量に速さを反映
 		move = Multiply(speed, Normalize(move));
+		//移動ベクトルをカメラの角度だけ回転する
+		Matrix4x4 rotate = MakeRotateMatrix(viewProjection_->rotation_);
+		move = Multiply(move, rotate);
 		//移動
 		worldTransform_.translation_ = Add(worldTransform_.translation_, move);
 	}

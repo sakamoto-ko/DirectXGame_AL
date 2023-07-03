@@ -5,8 +5,6 @@
 #include "Matrix4x4.h"
 #include <cmath>
 
-#include <cassert>
-
 // 加算
 Vector3 Add(const Vector3& v1, const Vector3& v2);
 // 減算

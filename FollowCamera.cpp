@@ -16,7 +16,7 @@ void FollowCamera::Update() {
 	XINPUT_STATE joyState;
 	//ジョイスティック状態取得
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
-		const float rotate = 0.0f;
+		const float rotate = 1.0f;
 		viewProjection_.rotation_.y += (float)joyState.Gamepad.sThumbRX / SHRT_MAX * rotate;
 	}
 	//追従対象がいれば
@@ -24,12 +24,17 @@ void FollowCamera::Update() {
 		//追従対象からカメラまでのオフセット
 		Vector3 offset = { 0.0f,2.0f,-10.0f };
 		
-		viewProjection_.rotation_ = MakeRotateMatrix(viewProjection_.rotation_);
+		Matrix4x4 rotate = MakeRotateMatrix(viewProjection_.rotation_);
 
 		//オフセットをカメラの回転に合わせて回転させる
-		offset=TransformNormal()
+		offset = TransformNormal(offset, rotate);
 
 		//座標をコピーしてオフセット分ずらす
 		viewProjection_.translation_ = Add(target_->translation_, offset);
 	}
+
+	ImGui::Begin("Camera");
+	ImGui::DragFloat3("translation", &viewProjection_.translation_.x, 0.01f);
+	ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.01f);
+	ImGui::End();
 }

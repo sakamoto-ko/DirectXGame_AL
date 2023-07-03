@@ -46,3 +46,6 @@ void Player::Update() {
 void Player::Draw(ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection);
 }
+void Player::DrawA(ViewProjection& viewProjection, uint32_t textureHandle_) {
+	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+}

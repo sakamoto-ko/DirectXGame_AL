@@ -24,6 +24,7 @@ public:
 	void Initialize(Model* model);
 	void Update();
 	void Draw(ViewProjection& viewProjection);
+	void DrawA(ViewProjection& viewProjection, uint32_t textureHandle_);
 
 	const WorldTransform& GetWorldTransform() { return worldTransform_; }
 };

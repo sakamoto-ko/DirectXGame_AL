@@ -41,7 +41,7 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_);
+	player_->Initialize(model_.get(), textureHandle_);
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelSkydome_);
@@ -118,7 +118,7 @@ void GameScene::Draw() {
 	skydome_->Draw(viewProjection_);
 	ground_->Draw(viewProjection_);
 
-	player_->DrawA(viewProjection_, textureHandle_);
+	player_->DrawA(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

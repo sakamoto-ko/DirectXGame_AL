@@ -11,10 +11,11 @@ Player::~Player() {
 
 }
 
-void Player::Initialize(Model* model) {
+void Player::Initialize(Model* model, uint32_t textureHandle) {
 	assert(model);
 
 	model_ = model;
+	textureHandle_ = textureHandle;
 
 	worldTransform_.Initialize();
 }
@@ -46,6 +47,6 @@ void Player::Update() {
 void Player::Draw(ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection);
 }
-void Player::DrawA(ViewProjection& viewProjection, uint32_t textureHandle_) {
+void Player::DrawA(ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 }

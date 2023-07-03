@@ -9,6 +9,7 @@ FollowCamera::~FollowCamera() {}
 void FollowCamera::Initialize() {
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
+	viewProjection_.rotation_.x = 1.0f;
 }
 //更新
 void FollowCamera::Update() {
@@ -16,7 +17,7 @@ void FollowCamera::Update() {
 	XINPUT_STATE joyState;
 	//ジョイスティック状態取得
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
-		const float rotate = 1.0f;
+		const float rotate = 1.0f; 
 		viewProjection_.rotation_.y += (float)joyState.Gamepad.sThumbRX / SHRT_MAX * rotate;
 	}
 	//追従対象がいれば

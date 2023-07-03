@@ -21,10 +21,10 @@ private:
 public:
 	Player();
 	~Player();
-	void Initialize(Model* model);
+	void Initialize(Model* model, uint32_t textureHandle);
 	void Update();
 	void Draw(ViewProjection& viewProjection);
-	void DrawA(ViewProjection& viewProjection, uint32_t textureHandle_);
+	void DrawA(ViewProjection& viewProjection);
 
 	const WorldTransform& GetWorldTransform() { return worldTransform_; }
 };

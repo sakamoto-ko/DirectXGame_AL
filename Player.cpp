@@ -94,6 +94,11 @@ void Player::Update() {
 
 	worldTransform_.UpdateMatrix();
 
+	worldTransformFace_.UpdateMatrix();
+	worldTransformBody_.UpdateMatrix();
+	worldTransformL_arm_.UpdateMatrix();
+	worldTransformR_arm_.UpdateMatrix();
+
 	ImGui::Begin("Player");
 	ImGui::DragFloat3("Player.translation", &worldTransform_.translation_.x, 0.01f);
 	ImGui::DragFloat3("Player.rotate", &worldTransform_.rotation_.x, 0.01f);

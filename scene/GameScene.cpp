@@ -21,9 +21,14 @@ void GameScene::Initialize() {
 	//3Dモデルの生成
 	model_.reset(Model::Create());
 
-	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
-	modelGround_ = Model::CreateFromOBJ("ground", true);
-	modelPlayer_ = Model::CreateFromOBJ("player", true);
+	modelSkydome_.reset(Model::CreateFromOBJ("skydome", true));
+	modelGround_.reset(Model::CreateFromOBJ("ground", true));
+	modelPlayer_.reset(Model::CreateFromOBJ("player", true));
+
+	modelFace_.reset(Model::CreateFromOBJ("face", true));
+	modelBody_.reset(Model::CreateFromOBJ("body", true));
+	modelL_arm_.reset(Model::CreateFromOBJ("left", true));
+	modelR_arm_.reset(Model::CreateFromOBJ("right", true));
 
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
@@ -41,13 +46,13 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 
 	skydome_ = std::make_unique<Skydome>();
-	skydome_->Initialize(modelSkydome_);
+	skydome_->Initialize(modelSkydome_.get());
 
 	ground_ = std::make_unique<Ground>();
-	ground_->Initialize(modelGround_);
+	ground_->Initialize(modelGround_.get());
 
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_, textureHandle_);
+	player_->Initialize(modelFace_.get(), modelBody_.get(), modelL_arm_.get(), modelR_arm_.get(), textureHandle_);
 
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();

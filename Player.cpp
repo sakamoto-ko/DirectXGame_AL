@@ -4,6 +4,35 @@
 #include <iostream>
 #include "ImGuiManager.h"
 
+//浮遊ギミック初期化
+void Player::InitializeFloatingGimmick() {
+	floatingParameter_ = 0.0f;
+}
+
+//浮遊ギミック更新
+void Player::UpdateFloatingGimmick() {
+	frame_ += 1;
+	if (frame_ >= 60) {
+		frame_ = 0;
+	}
+
+	//浮遊移動のサイクル<frame>
+	const uint16_t period = frame_;
+	//1フレームでのパラメータ加算値
+	const float step = 2.0f * PAI / period;
+	//パラメータを1ステップ分加算
+	floatingParameter_ += step;
+	//2πを超えたら0に戻す
+	floatingParameter_ = std::fmod(floatingParameter_, 2.0f * PAI);
+	//浮遊の横幅<m>
+	const float floatingWidth = 1.0f;
+	//浮遊を座標に反映
+	worldTransformFace_.translation_.y = std::sin(floatingParameter_) * floatingWidth;
+	worldTransformBody_.translation_.y = std::sin(floatingParameter_) * floatingWidth;
+	worldTransformL_arm_.translation_.y = std::sin(floatingParameter_) * floatingWidth;
+	worldTransformR_arm_.translation_.y = std::sin(floatingParameter_) * floatingWidth;
+}
+
 Player::Player() {
 
 }
@@ -12,18 +41,31 @@ Player::~Player() {
 
 }
 
-void Player::Initialize(Model* model, uint32_t textureHandle) {
-	assert(model);
+void Player::Initialize(Model* modelFace, Model* modelBody, Model* modelL_arm, Model* modelR_arm, uint32_t textureHandle) {
+	assert(modelFace);
+	assert(modelBody);
+	assert(modelL_arm);
+	assert(modelR_arm);
 
-	model_ = model;
+	modelFace_.reset(modelFace);
+	modelBody_.reset(modelBody);
+	modelL_arm_.reset(modelL_arm);
+	modelR_arm_.reset(modelR_arm);
+
 	textureHandle_ = textureHandle;
 
 	worldTransform_.Initialize();
+
+	//浮遊ギミック初期化
+	InitializeFloatingGimmick();
 }
 
 void Player::Update() {
 	//ゲームパッドの状態を得る変数(XINPUT)
 	XINPUT_STATE joyState;
+
+	//浮遊ギミック更新
+	UpdateFloatingGimmick();
 
 	//ジョイスティック状態取得
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
@@ -59,7 +101,10 @@ void Player::Update() {
 }
 
 void Player::Draw(ViewProjection& viewProjection) {
-	model_->Draw(worldTransform_, viewProjection);
+	modelFace_->Draw(worldTransformFace_, viewProjection);
+	modelBody_->Draw(worldTransformBody_, viewProjection);
+	modelL_arm_->Draw(worldTransformL_arm_, viewProjection);
+	modelR_arm_->Draw(worldTransformR_arm_, viewProjection);
 }
 void Player::DrawA(ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);

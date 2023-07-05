@@ -58,9 +58,14 @@ private: // メンバ変数
 	//3Dモデル
 	std::unique_ptr <Model> model_ = nullptr;
 
-	Model* modelSkydome_ = nullptr;
-	Model* modelGround_ = nullptr;
-	Model* modelPlayer_ = nullptr;
+	std::unique_ptr <Model> modelSkydome_ = nullptr;
+	std::unique_ptr <Model> modelGround_ = nullptr;
+	std::unique_ptr <Model> modelPlayer_ = nullptr;
+
+	std::unique_ptr<Model> modelFace_;
+	std::unique_ptr<Model> modelBody_;
+	std::unique_ptr<Model> modelL_arm_;
+	std::unique_ptr<Model> modelR_arm_;
 
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;

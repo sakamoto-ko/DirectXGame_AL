@@ -44,7 +44,7 @@ void Player::Update() {
 
 		//移動方向に向きを合わせる
 		//Y軸周り角度(θy)
-		worldTransform_.rotation_.y= std::atan2(move.x, move.z);
+		worldTransform_.rotation_.y = std::atan2(move.x, move.z);
 
 		//移動
 		worldTransform_.translation_ = Add(worldTransform_.translation_, move);

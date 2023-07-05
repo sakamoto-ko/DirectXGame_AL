@@ -47,7 +47,7 @@ void GameScene::Initialize() {
 	ground_->Initialize(modelGround_);
 
 	player_ = std::make_unique<Player>();
-	player_->Initialize(model_.get(), textureHandle_);
+	player_->Initialize(modelPlayer_, textureHandle_);
 
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
@@ -122,7 +122,7 @@ void GameScene::Draw() {
 	skydome_->Draw(viewProjection_);
 	ground_->Draw(viewProjection_);
 
-	player_->DrawA(viewProjection_);
+	player_->Draw(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

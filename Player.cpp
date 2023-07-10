@@ -6,42 +6,45 @@
 
 //浮遊ギミック初期化
 void Player::InitializeFloatingGimmick() {
+	//浮遊移動のサイクル<frame>
+	period = 60;
+	//浮遊の振幅<m>
+	amplitude = 0.5f;
+
 	floatingParameter_ = 0.0f;
 }
 
 //浮遊ギミック更新
 void Player::UpdateFloatingGimmick() {
-	frame_ += 1;
-	if (frame_ >= 60) {
-		frame_ = 0;
-	}
-
-	//浮遊移動のサイクル<frame>
-	const uint16_t period = frame_;
 	//1フレームでのパラメータ加算値
 	const float step = 2.0f * PAI / period;
 	//パラメータを1ステップ分加算
 	floatingParameter_ += step;
 	//2πを超えたら0に戻す
 	floatingParameter_ = std::fmod(floatingParameter_, 2.0f * PAI);
-	//浮遊の横幅<m>
-	const float floatingWidth = 1.0f;
 	//浮遊を座標に反映
-	worldTransformFace_.translation_.y = std::sin(floatingParameter_) * floatingWidth;
-	worldTransformBody_.translation_.y = std::sin(floatingParameter_) * floatingWidth;
-	worldTransformL_arm_.translation_.y = std::sin(floatingParameter_) * floatingWidth;
-	worldTransformR_arm_.translation_.y = std::sin(floatingParameter_) * floatingWidth;
+	worldTransformFace_.translation_.y = std::sin(floatingParameter_) * amplitude + 5.0f;
+	worldTransformBody_.translation_.y = std::sin(floatingParameter_) * amplitude + 5.0f;
+	worldTransformL_arm_.translation_.y = std::sin(floatingParameter_) * amplitude + 5.0f;
+	worldTransformR_arm_.translation_.y = std::sin(floatingParameter_) * amplitude + 5.0f;
+	worldTransformL_arm_.rotation_.x = std::sin(floatingParameter_) * amplitude;
+	worldTransformR_arm_.rotation_.x = -std::sin(floatingParameter_) * amplitude;
+
+	ImGui::Begin("Player");
+	ImGui::SliderFloat3("face.translation", &worldTransformFace_.translation_.x, -100, 100);
+	ImGui::SliderFloat3("body.translation", &worldTransformBody_.translation_.x, -100, 100);
+	ImGui::SliderFloat3("L_arm.translation", &worldTransformL_arm_.translation_.x, -100, 100);
+	ImGui::SliderFloat3("R_arm.translation", &worldTransformR_arm_.translation_.x, -100, 100);
+	ImGui::SliderInt("period", reinterpret_cast<int*>(&period), 1, 144);
+	ImGui::SliderFloat("amplitude", &amplitude, 0.0f, PAI * 2.0f);
+	ImGui::End();
 }
 
-Player::Player() {
+Player::Player() {}
 
-}
+Player::~Player() {}
 
-Player::~Player() {
-
-}
-
-void Player::Initialize(Model* modelFace, Model* modelBody, Model* modelL_arm, Model* modelR_arm, uint32_t textureHandle) {
+void Player::Initialize(Model* modelFace, Model* modelBody, Model* modelL_arm, Model* modelR_arm) {
 	assert(modelFace);
 	assert(modelBody);
 	assert(modelL_arm);
@@ -52,9 +55,18 @@ void Player::Initialize(Model* modelFace, Model* modelBody, Model* modelL_arm, M
 	modelL_arm_.reset(modelL_arm);
 	modelR_arm_.reset(modelR_arm);
 
-	textureHandle_ = textureHandle;
+	//modelL_arm = 0;
+	//worldTransform_.Initialize();
 
-	worldTransform_.Initialize();
+	worldTransformFace_.Initialize();
+	worldTransformBody_.Initialize();
+	worldTransformL_arm_.Initialize();
+	worldTransformR_arm_.Initialize();
+
+	worldTransformL_arm_.translation_.z = 0.0f;
+	worldTransformR_arm_.translation_.z = 0.0f;
+	worldTransformL_arm_.translation_.x = 0.75f;
+	worldTransformR_arm_.translation_.x = -0.75f;
 
 	//浮遊ギミック初期化
 	InitializeFloatingGimmick();
@@ -86,23 +98,23 @@ void Player::Update() {
 
 		//移動方向に向きを合わせる
 		//Y軸周り角度(θy)
-		worldTransform_.rotation_.y = std::atan2(move.x, move.z);
+		worldTransformBody_.rotation_.y = std::atan2(move.x, move.z);
 
 		//移動
-		worldTransform_.translation_ = Add(worldTransform_.translation_, move);
+		worldTransformBody_.translation_ = Add(worldTransformBody_.translation_, move);
 	}
 
-	worldTransform_.UpdateMatrix();
+	//worldTransform_.UpdateMatrix();
 
 	worldTransformFace_.UpdateMatrix();
 	worldTransformBody_.UpdateMatrix();
 	worldTransformL_arm_.UpdateMatrix();
 	worldTransformR_arm_.UpdateMatrix();
 
-	ImGui::Begin("Player");
-	ImGui::DragFloat3("Player.translation", &worldTransform_.translation_.x, 0.01f);
-	ImGui::DragFloat3("Player.rotate", &worldTransform_.rotation_.x, 0.01f);
-	ImGui::End();
+	/*ImGui::Begin("Player");
+	ImGui::DragFloat3("worldTransformBody_.translation", &worldTransformBody_.translation_.x, 0.01f);
+	ImGui::DragFloat3("Player.rotate", &worldTransformBody_.rotation_.x, 0.01f); 
+	ImGui::End();*/
 }
 
 void Player::Draw(ViewProjection& viewProjection) {
@@ -111,6 +123,6 @@ void Player::Draw(ViewProjection& viewProjection) {
 	modelL_arm_->Draw(worldTransformL_arm_, viewProjection);
 	modelR_arm_->Draw(worldTransformR_arm_, viewProjection);
 }
-void Player::DrawA(ViewProjection& viewProjection) {
-	model_->Draw(worldTransform_, viewProjection, textureHandle_);
-}
+//void Player::DrawA(ViewProjection& viewProjection) {
+//	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+//}

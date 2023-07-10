@@ -2,7 +2,6 @@
 
 #include "Audio.h"
 #include "DirectXCommon.h"
-#include "SafeDelete.h"
 #include "DebugCamera.h"
 #include <memory>
 
@@ -50,7 +49,7 @@ private: // メンバ変数
 	Input* input_ = nullptr;
 
 	//テクスチャハンドル
-	uint32_t textureHandle_ = 0;
+	//uint32_t textureHandle_ = 0;
 
 	//スプライト
 	Sprite* sprite_ = nullptr;
@@ -60,7 +59,8 @@ private: // メンバ変数
 
 	std::unique_ptr <Model> modelSkydome_ = nullptr;
 	std::unique_ptr <Model> modelGround_ = nullptr;
-	std::unique_ptr <Model> modelPlayer_ = nullptr;
+	
+	//std::unique_ptr <Model> modelPlayer_ = nullptr;
 
 	std::unique_ptr<Model> modelFace_;
 	std::unique_ptr<Model> modelBody_;

@@ -58,6 +58,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 
 	// ゲームシーンの初期化
+	//GameScene test;
+	//gameScene = &test;
 	gameScene = new GameScene();
 	gameScene->Initialize();
 

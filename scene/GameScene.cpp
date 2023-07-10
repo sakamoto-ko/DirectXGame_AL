@@ -16,14 +16,15 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 
 	//ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("mario.jpg");
+	//textureHandle_ = TextureManager::Load("mario.jpg");
 
 	//3Dモデルの生成
 	model_.reset(Model::Create());
 
 	modelSkydome_.reset(Model::CreateFromOBJ("skydome", true));
 	modelGround_.reset(Model::CreateFromOBJ("ground", true));
-	modelPlayer_.reset(Model::CreateFromOBJ("player", true));
+
+	//modelPlayer_.reset(Model::CreateFromOBJ("player", true));
 
 	modelFace_.reset(Model::CreateFromOBJ("face", true));
 	modelBody_.reset(Model::CreateFromOBJ("body", true));
@@ -52,7 +53,7 @@ void GameScene::Initialize() {
 	ground_->Initialize(modelGround_.get());
 
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelFace_.get(), modelBody_.get(), modelL_arm_.get(), modelR_arm_.get(), textureHandle_);
+	player_->Initialize(modelFace_.get(), modelBody_.get(), modelL_arm_.get(), modelR_arm_.get());
 
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();

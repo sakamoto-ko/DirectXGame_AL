@@ -22,7 +22,7 @@ private:
 
 	uint32_t textureHandle_ = 0u;
 
-	WorldTransform worldTransform_;
+	//WorldTransform worldTransform_;
 
 	WorldTransform worldTransformFace_;
 	WorldTransform worldTransformBody_;
@@ -36,16 +36,18 @@ private:
 	float floatingParameter_ = 0.0f;
 
 	uint16_t frame_ = 0;
+	uint16_t period = 0;
+	float amplitude = 0;
 
 public:
 	Player();
 	~Player();
-	void Initialize(Model* modelFace, Model* modelBody, Model* modelL_arm, Model* modelR_arm, uint32_t textureHandle);
+	void Initialize(Model* modelFace, Model* modelBody, Model* modelL_arm, Model* modelR_arm);
 	void Update();
 	void Draw(ViewProjection& viewProjection);
-	void DrawA(ViewProjection& viewProjection);
+	//void DrawA(ViewProjection& viewProjection);
 
-	const WorldTransform& GetWorldTransform() { return worldTransform_; }
+	const WorldTransform& GetWorldTransform() { return worldTransformBody_; }
 
 	void SetViewPRojection(const ViewProjection* viewProjection) { viewProjection_ = viewProjection; }
 

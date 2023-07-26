@@ -1,29 +1,8 @@
 #pragma once
-#include "Audio.h"
-#include "AxisIndicator.h"
-#include "DebugCamera.h"
-#include "DirectXCommon.h"
-#include "ImGuiManager.h"
-#include "Input.h"
-#include "Model.h"
-#include "SafeDelete.h"
-#include "Sprite.h"
-#include "TextureManager.h"
-#include "ViewProjection.h"
-#include "WorldTransform.h"
+#include "BaseCharactor.h"
 
-class Player {
+class Player : public BaseCharacter{
 private:
-	std::unique_ptr<Model>  model_ = nullptr;
-	std::unique_ptr<Model> modelFace_;
-	std::unique_ptr<Model> modelBody_;
-	std::unique_ptr<Model> modelL_arm_;
-	std::unique_ptr<Model> modelR_arm_;
-
-	uint32_t textureHandle_ = 0u;
-
-	//WorldTransform worldTransform_;
-
 	WorldTransform worldTransformFace_;
 	WorldTransform worldTransformBody_;
 	WorldTransform worldTransformL_arm_;
@@ -39,13 +18,17 @@ private:
 	uint16_t period = 0;
 	float amplitude = 0;
 
+	uint32_t kModelFace = 0;
+	uint32_t kModelBody = 1;
+	uint32_t kModelL_arm = 2;
+	uint32_t kModelR_arm = 3;
+
 public:
 	Player();
 	~Player();
-	void Initialize(Model* modelFace, Model* modelBody, Model* modelL_arm, Model* modelR_arm);
-	void Update();
-	void Draw(ViewProjection& viewProjection);
-	//void DrawA(ViewProjection& viewProjection);
+	void Initialize(const std::vector<Model*>& models) override;
+	void Update() override;
+	void Draw(const ViewProjection& viewProjection) override;
 
 	const WorldTransform& GetWorldTransform() { return worldTransformBody_; }
 

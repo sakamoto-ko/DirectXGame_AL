@@ -44,19 +44,9 @@ Player::Player() {}
 
 Player::~Player() {}
 
-void Player::Initialize(Model* modelFace, Model* modelBody, Model* modelL_arm, Model* modelR_arm) {
-	assert(modelFace);
-	assert(modelBody);
-	assert(modelL_arm);
-	assert(modelR_arm);
-
-	modelFace_.reset(modelFace);
-	modelBody_.reset(modelBody);
-	modelL_arm_.reset(modelL_arm);
-	modelR_arm_.reset(modelR_arm);
-
-	//modelL_arm = 0;
-	//worldTransform_.Initialize();
+void Player::Initialize(const std::vector<Model*>& models) {
+	//既定クラスの初期化
+	BaseCharacter::Initialize(models);
 
 	worldTransformFace_.Initialize();
 	worldTransformBody_.Initialize();
@@ -73,11 +63,14 @@ void Player::Initialize(Model* modelFace, Model* modelBody, Model* modelL_arm, M
 }
 
 void Player::Update() {
-	//ゲームパッドの状態を得る変数(XINPUT)
-	XINPUT_STATE joyState;
+	//既定クラスの更新
+	BaseCharacter::Update();
 
 	//浮遊ギミック更新
 	UpdateFloatingGimmick();
+
+	//ゲームパッドの状態を得る変数(XINPUT)
+	XINPUT_STATE joyState;
 
 	//ジョイスティック状態取得
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
@@ -103,26 +96,19 @@ void Player::Update() {
 		//移動
 		worldTransformBody_.translation_ = Add(worldTransformBody_.translation_, move);
 	}
-
-	//worldTransform_.UpdateMatrix();
-
+	
 	worldTransformFace_.UpdateMatrix();
 	worldTransformBody_.UpdateMatrix();
 	worldTransformL_arm_.UpdateMatrix();
 	worldTransformR_arm_.UpdateMatrix();
-
-	/*ImGui::Begin("Player");
-	ImGui::DragFloat3("worldTransformBody_.translation", &worldTransformBody_.translation_.x, 0.01f);
-	ImGui::DragFloat3("Player.rotate", &worldTransformBody_.rotation_.x, 0.01f); 
-	ImGui::End();*/
 }
 
-void Player::Draw(ViewProjection& viewProjection) {
-	modelFace_->Draw(worldTransformFace_, viewProjection);
-	modelBody_->Draw(worldTransformBody_, viewProjection);
-	modelL_arm_->Draw(worldTransformL_arm_, viewProjection);
-	modelR_arm_->Draw(worldTransformR_arm_, viewProjection);
+void Player::Draw(const ViewProjection& viewProjection) {
+	//既定クラスの描画
+	BaseCharacter::Draw(viewProjection);
+
+	models_[kModelFace]->Draw(worldTransformFace_, viewProjection);
+	models_[kModelBody]->Draw(worldTransformBody_, viewProjection);
+	models_[kModelL_arm]->Draw(worldTransformL_arm_, viewProjection);
+	models_[kModelR_arm]->Draw(worldTransformR_arm_, viewProjection);
 }
-//void Player::DrawA(ViewProjection& viewProjection) {
-//	model_->Draw(worldTransform_, viewProjection, textureHandle_);
-//}

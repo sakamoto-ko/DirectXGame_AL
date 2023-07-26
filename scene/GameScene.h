@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "Player.h"
+#include "Enemy.h"
 #include "Skydome.h"
 #include "Ground.h"
 #include "FollowCamera.h"
@@ -60,12 +61,15 @@ private: // メンバ変数
 	std::unique_ptr <Model> modelSkydome_ = nullptr;
 	std::unique_ptr <Model> modelGround_ = nullptr;
 	
-	//std::unique_ptr <Model> modelPlayer_ = nullptr;
-
+	//プレイヤーモデル
 	std::unique_ptr<Model> modelFace_;
 	std::unique_ptr<Model> modelBody_;
 	std::unique_ptr<Model> modelL_arm_;
 	std::unique_ptr<Model> modelR_arm_;
+	//エネミーモデル
+	std::unique_ptr<Model> modelEnemyBody_;
+	std::unique_ptr<Model> modelEnemyL_arm_;
+	std::unique_ptr<Model> modelEnemyR_arm_;
 
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
@@ -77,6 +81,8 @@ private: // メンバ変数
 	DebugCamera* debugCamera_ = nullptr;
 
 	std::unique_ptr<Player> player_;
+
+	std::unique_ptr<Enemy> enemy_;
 
 	std::unique_ptr<Skydome> skydome_;
 

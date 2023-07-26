@@ -24,12 +24,27 @@ void GameScene::Initialize() {
 	modelSkydome_.reset(Model::CreateFromOBJ("skydome", true));
 	modelGround_.reset(Model::CreateFromOBJ("ground", true));
 
-	//modelPlayer_.reset(Model::CreateFromOBJ("player", true));
-
+	//自キャラモデル
 	modelFace_.reset(Model::CreateFromOBJ("face", true));
 	modelBody_.reset(Model::CreateFromOBJ("body", true));
 	modelL_arm_.reset(Model::CreateFromOBJ("left", true));
 	modelR_arm_.reset(Model::CreateFromOBJ("right", true));
+	std::vector<Model*>playerModels = {
+		modelFace_.get(),
+		modelBody_.get(),
+		modelL_arm_.get(),
+		modelR_arm_.get()
+	};
+
+	//敵キャラモデル
+	modelBody_.reset(Model::CreateFromOBJ("enemy_body", true));
+	modelL_arm_.reset(Model::CreateFromOBJ("enemy_weapon", true));
+	modelR_arm_.reset(Model::CreateFromOBJ("enemy_weapon", true));
+	std::vector<Model*>enemyModels = {
+		modelBody_.get(),
+		modelL_arm_.get(),
+		modelR_arm_.get()
+	};
 
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
@@ -53,7 +68,10 @@ void GameScene::Initialize() {
 	ground_->Initialize(modelGround_.get());
 
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelFace_.get(), modelBody_.get(), modelL_arm_.get(), modelR_arm_.get());
+	player_->Initialize(playerModels);
+
+	enemy_ = std::make_unique<Enemy>();
+	enemy_->Initialize(enemyModels);
 
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
@@ -82,6 +100,8 @@ void GameScene::Update() {
 	ground_->Update();
 
 	player_->Update();
+
+	enemy_->Update();
 
 	if (isDebugCameraActive_) {
 		//デバッグカメラの更新
@@ -129,6 +149,8 @@ void GameScene::Draw() {
 	ground_->Draw(viewProjection_);
 
 	player_->Draw(viewProjection_);
+
+	enemy_->Draw(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

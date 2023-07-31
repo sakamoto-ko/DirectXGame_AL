@@ -20,6 +20,9 @@ private:
 	//半径の長さ
 	float length;
 
+	//カメラのビュープロジェクション
+	const ViewProjection* viewProjection_ = nullptr;
+
 public:
 	Enemy();
 	~Enemy();
@@ -32,5 +35,8 @@ public:
 
 	//移動更新
 	void UpdateMoveGimmick();
+
+	void SetViewPRojection(const ViewProjection* viewProjection) { viewProjection_ = viewProjection; }
+
 };
 

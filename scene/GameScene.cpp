@@ -78,6 +78,8 @@ void GameScene::Initialize() {
 
 	//カメラのビュープロジェクションを自キャラにコピー
 	player_->SetViewPRojection(&followCamera_->GetViewProjection());
+	//カメラのビュープロジェクションを敵キャラにコピー
+	enemy_->SetViewPRojection(&followCamera_->GetViewProjection());
 
 	//自キャラのワールドトランスフォームを追従カメラにセット
 	followCamera_->SetTarget(&player_->GetWorldTransform());

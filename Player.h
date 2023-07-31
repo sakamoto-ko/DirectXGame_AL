@@ -3,6 +3,7 @@
 
 class Player : public BaseCharacter{
 private:
+	WorldTransform worldTransformBase_;
 	WorldTransform worldTransformFace_;
 	WorldTransform worldTransformBody_;
 	WorldTransform worldTransformL_arm_;

@@ -11,7 +11,7 @@ void Enemy::InitializeMoveGimmick() {
 	//角度
 	angle = { 0.5f,0.5f,0.5f };
 	//半径の長さ
-	length = 8.0f;
+	length = 10.0f;
 }
 
 //移動更新
@@ -23,32 +23,46 @@ void Enemy::UpdateMoveGimmick() {
 	float add_x = cos(radius) * length;
 	float add_z = sin(radius) * length;
 
-	// 結果ででた位置を中心位置に加算し、それを描画位置とする
-	worldTransformBody_.translation_.x = center.x + add_x;
-	worldTransformBody_.translation_.z = center.z + add_z;
+	//速さ
+	const float speed = 1.0f;
+	//移動量
+	Vector3 move = {
+		add_x,
+		0,
+		add_z
+	};
+	//移動量に速さを反映
+	move = Multiply(speed, Normalize(move));
 
-	worldTransformL_arm_.translation_.x = center.x + add_x - 2.5f;
-	worldTransformL_arm_.translation_.z = center.z + add_z;
-
-	worldTransformR_arm_.translation_.x = center.x + add_x + 2.5f;
-	worldTransformR_arm_.translation_.z = center.z + add_z;
-
-	// 角度更新
-	angle.x += 3.0f;
+	//移動ベクトルをカメラの角度だけ回転する
+	Matrix4x4 rotate = MakeRotateMatrix(Multiply(1.0f,viewProjection_->rotation_));
+	move = TransformNormal(move, rotate);
 
 	//移動方向に向きを合わせる
 	//Y軸周り角度(θy)
-	worldTransformBody_.rotation_.y = std::atan2(angle.x, angle.z);
-	worldTransformL_arm_.rotation_.y = std::atan2(angle.x, angle.z);
-	worldTransformR_arm_.rotation_.y = std::atan2(angle.x, angle.z);
-	//Y軸周りに-θy回す回転行列を計算
+	worldTransformBody_.rotation_.y = std::atan2(move.x, move.z);
+	worldTransformL_arm_.rotation_.y = std::atan2(move.x, move.z);
+	worldTransformR_arm_.rotation_.y = std::atan2(move.x, move.z);
 
-	//velocity_に回転行列を掛け算してvelocityZを求める
+	//結果ででた位置を中心位置に加算し、それを描画位置とする
+	worldTransformBody_.translation_.x = center.x + add_x;
+	worldTransformBody_.translation_.z = center.z + add_z;
+	worldTransformL_arm_.translation_.x = center.x + add_x;
+	worldTransformL_arm_.translation_.z = center.z + add_z;
+	worldTransformR_arm_.translation_.x = center.x + add_x;
+	worldTransformR_arm_.translation_.z = center.z + add_z;
 
-	//X軸周り角度(θy)
-	worldTransformBody_.rotation_.x = std::atan2(angle.y, angle.z);
-	worldTransformL_arm_.rotation_.x = std::atan2(angle.y, angle.z);
-	worldTransformR_arm_.rotation_.x = std::atan2(angle.y, angle.z);
+	worldTransformL_arm_.translation_.x -= 2.5f;
+	worldTransformR_arm_.translation_.x += 2.5f;
+
+	// 角度更新
+	angle.x += 1.0f;
+
+	ImGui::Begin("Enemy");
+	ImGui::SliderFloat3("body.translation", &worldTransformBody_.translation_.x, -10, 10);
+	ImGui::SliderFloat3("L_arm.translation", &worldTransformL_arm_.translation_.x, -10, 10);
+	ImGui::SliderFloat3("R_arm.translation", &worldTransformR_arm_.translation_.x, -10, 10);
+	ImGui::End();
 }
 
 Enemy::Enemy() {}

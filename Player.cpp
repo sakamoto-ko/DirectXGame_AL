@@ -23,10 +23,7 @@ void Player::UpdateFloatingGimmick() {
 	//2πを超えたら0に戻す
 	floatingParameter_ = std::fmod(floatingParameter_, 2.0f * PAI);
 	//浮遊を座標に反映
-	worldTransformFace_.translation_.y = std::sin(floatingParameter_) * amplitude + 5.0f;
-	worldTransformBody_.translation_.y = std::sin(floatingParameter_) * amplitude + 4.9f;
-	worldTransformL_arm_.translation_.y = std::sin(floatingParameter_) * amplitude + 5.0f;
-	worldTransformR_arm_.translation_.y = std::sin(floatingParameter_) * amplitude + 5.0f;
+	worldTransformBase_.translation_.y = std::sin(floatingParameter_) * amplitude + 5.0f;
 	worldTransformL_arm_.rotation_.x = std::sin(floatingParameter_) * amplitude;
 	worldTransformR_arm_.rotation_.x = -std::sin(floatingParameter_) * amplitude;
 
@@ -48,16 +45,11 @@ void Player::Initialize(const std::vector<Model*>& models) {
 	//既定クラスの初期化
 	BaseCharacter::Initialize(models);
 
+	worldTransformBase_.Initialize();
 	worldTransformFace_.Initialize();
 	worldTransformBody_.Initialize();
 	worldTransformL_arm_.Initialize();
 	worldTransformR_arm_.Initialize();
-
-	worldTransformL_arm_.translation_.x = 0.75f;
-	worldTransformL_arm_.translation_.z = 0.0f;
-
-	worldTransformR_arm_.translation_.x = -0.75f;
-	worldTransformR_arm_.translation_.z = 0.0f;
 
 	//浮遊ギミック初期化
 	InitializeFloatingGimmick();
@@ -80,6 +72,7 @@ void Player::Update() {
 		//移動量
 		Vector3 move = {
 			(float)joyState.Gamepad.sThumbLX / SHRT_MAX,
+			0,
 			(float)joyState.Gamepad.sThumbLY / SHRT_MAX
 		};
 		//移動量に速さを反映
@@ -91,12 +84,32 @@ void Player::Update() {
 
 		//移動方向に向きを合わせる
 		//Y軸周り角度(θy)
-		worldTransformBody_.rotation_.y = std::atan2(move.x, move.z);
+		worldTransformBase_.rotation_.y = std::atan2(move.x, move.z);
 
 		//移動
-		worldTransformBody_.translation_ = Add(worldTransformBody_.translation_, move);
+		worldTransformBase_.translation_ = Add(worldTransformBase_.translation_, move);
+
+		//親子関係
+		worldTransformBody_.translation_ = worldTransformBase_.translation_;
+		worldTransformBody_.translation_.y = worldTransformBase_.translation_.y + 3.5f;
+		worldTransformBody_.rotation_.y = -worldTransformBase_.rotation_.y;
+
+		worldTransformFace_.translation_ = worldTransformBase_.translation_;
+		worldTransformFace_.translation_.y = worldTransformBase_.translation_.y + 3.5f;
+		worldTransformFace_.rotation_.y = worldTransformBase_.rotation_.y;
+
+		worldTransformL_arm_.translation_.x = worldTransformBase_.translation_.x + 0.75f;
+		worldTransformL_arm_.translation_.y = worldTransformBase_.translation_.y + 3.5f;
+		worldTransformL_arm_.translation_.z = worldTransformBase_.translation_.z;
+		worldTransformL_arm_.rotation_.y = worldTransformBase_.rotation_.y;
+
+		worldTransformR_arm_.translation_.x = worldTransformBase_.translation_.x - 0.75f;
+		worldTransformR_arm_.translation_.y = worldTransformBase_.translation_.y + 3.5f;
+		worldTransformR_arm_.translation_.z = worldTransformBase_.translation_.z;
+		worldTransformR_arm_.rotation_.y = worldTransformBase_.rotation_.y;
 	}
-	
+
+	worldTransformBase_.UpdateMatrix();
 	worldTransformFace_.UpdateMatrix();
 	worldTransformBody_.UpdateMatrix();
 	worldTransformL_arm_.UpdateMatrix();

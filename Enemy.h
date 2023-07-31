@@ -12,11 +12,25 @@ private:
 	uint32_t kModelL_arm = 1;
 	uint32_t kModelR_arm = 2;
 
+	//円運動用
+	//中心座標
+	Vector3 center{};
+	//角度
+	Vector3 angle{};
+	//半径の長さ
+	float length;
+
 public:
 	Enemy();
 	~Enemy();
 	void Initialize(const std::vector<Model*>& models) override;
 	void Update() override;
 	void Draw(const ViewProjection& viewProjection) override;
+
+	//移動初期化
+	void InitializeMoveGimmick();
+
+	//移動更新
+	void UpdateMoveGimmick();
 };
 

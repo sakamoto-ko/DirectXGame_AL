@@ -37,13 +37,13 @@ void GameScene::Initialize() {
 	};
 
 	//敵キャラモデル
-	modelBody_.reset(Model::CreateFromOBJ("enemy_body", true));
-	modelL_arm_.reset(Model::CreateFromOBJ("enemy_weapon", true));
-	modelR_arm_.reset(Model::CreateFromOBJ("enemy_weapon", true));
+	modelEnemyBody_.reset(Model::CreateFromOBJ("enemy_body", true));
+	modelEnemyL_arm_.reset(Model::CreateFromOBJ("enemy_weapon", true));
+	modelEnemyR_arm_.reset(Model::CreateFromOBJ("enemy_weapon", true));
 	std::vector<Model*>enemyModels = {
-		modelBody_.get(),
-		modelL_arm_.get(),
-		modelR_arm_.get()
+		modelEnemyBody_.get(),
+		modelEnemyL_arm_.get(),
+		modelEnemyR_arm_.get()
 	};
 
 	//ワールドトランスフォームの初期化

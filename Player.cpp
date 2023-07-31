@@ -24,17 +24,17 @@ void Player::UpdateFloatingGimmick() {
 	floatingParameter_ = std::fmod(floatingParameter_, 2.0f * PAI);
 	//浮遊を座標に反映
 	worldTransformFace_.translation_.y = std::sin(floatingParameter_) * amplitude + 5.0f;
-	worldTransformBody_.translation_.y = std::sin(floatingParameter_) * amplitude + 5.0f;
+	worldTransformBody_.translation_.y = std::sin(floatingParameter_) * amplitude + 4.9f;
 	worldTransformL_arm_.translation_.y = std::sin(floatingParameter_) * amplitude + 5.0f;
 	worldTransformR_arm_.translation_.y = std::sin(floatingParameter_) * amplitude + 5.0f;
 	worldTransformL_arm_.rotation_.x = std::sin(floatingParameter_) * amplitude;
 	worldTransformR_arm_.rotation_.x = -std::sin(floatingParameter_) * amplitude;
 
 	ImGui::Begin("Player");
-	ImGui::SliderFloat3("face.translation", &worldTransformFace_.translation_.x, -100, 100);
-	ImGui::SliderFloat3("body.translation", &worldTransformBody_.translation_.x, -100, 100);
-	ImGui::SliderFloat3("L_arm.translation", &worldTransformL_arm_.translation_.x, -100, 100);
-	ImGui::SliderFloat3("R_arm.translation", &worldTransformR_arm_.translation_.x, -100, 100);
+	ImGui::SliderFloat3("face.translation", &worldTransformFace_.translation_.x, -10, 10);
+	ImGui::SliderFloat3("body.translation", &worldTransformBody_.translation_.x, -10, 10);
+	ImGui::SliderFloat3("L_arm.translation", &worldTransformL_arm_.translation_.x, -10, 10);
+	ImGui::SliderFloat3("R_arm.translation", &worldTransformR_arm_.translation_.x, -10, 10);
 	ImGui::SliderInt("period", reinterpret_cast<int*>(&period), 1, 144);
 	ImGui::SliderFloat("amplitude", &amplitude, 0.0f, PAI * 2.0f);
 	ImGui::End();
@@ -53,10 +53,11 @@ void Player::Initialize(const std::vector<Model*>& models) {
 	worldTransformL_arm_.Initialize();
 	worldTransformR_arm_.Initialize();
 
-	worldTransformL_arm_.translation_.z = 0.0f;
-	worldTransformR_arm_.translation_.z = 0.0f;
 	worldTransformL_arm_.translation_.x = 0.75f;
+	worldTransformL_arm_.translation_.z = 0.0f;
+
 	worldTransformR_arm_.translation_.x = -0.75f;
+	worldTransformR_arm_.translation_.z = 0.0f;
 
 	//浮遊ギミック初期化
 	InitializeFloatingGimmick();
@@ -79,7 +80,6 @@ void Player::Update() {
 		//移動量
 		Vector3 move = {
 			(float)joyState.Gamepad.sThumbLX / SHRT_MAX,
-			0.0f,
 			(float)joyState.Gamepad.sThumbLY / SHRT_MAX
 		};
 		//移動量に速さを反映
@@ -105,7 +105,7 @@ void Player::Update() {
 
 void Player::Draw(const ViewProjection& viewProjection) {
 	//既定クラスの描画
-	BaseCharacter::Draw(viewProjection);
+	//BaseCharacter::Draw(viewProjection);
 
 	models_[kModelFace]->Draw(worldTransformFace_, viewProjection);
 	models_[kModelBody]->Draw(worldTransformBody_, viewProjection);

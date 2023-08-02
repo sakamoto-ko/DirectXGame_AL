@@ -11,6 +11,7 @@
 #include "TextureManager.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include <variant>
 
 class BaseCharacter
 {

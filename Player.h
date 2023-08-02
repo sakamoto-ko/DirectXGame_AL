@@ -36,6 +36,9 @@ private:
 	//次のふるまいリクエスト
 	std::optional<Behavior> behaviorRequest_ = std::nullopt;
 
+	int isAttack = false;
+	int afterAttackStay = 20;
+
 public:
 	Player();
 	~Player();

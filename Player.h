@@ -43,7 +43,7 @@ public:
 	void Update() override;
 	void Draw(const ViewProjection& viewProjection) override;
 
-	const WorldTransform& GetWorldTransform() { return worldTransformBody_; }
+	const WorldTransform& GetWorldTransform() { return worldTransformBase_; }
 
 	void SetViewPRojection(const ViewProjection* viewProjection) { viewProjection_ = viewProjection; }
 

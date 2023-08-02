@@ -41,19 +41,10 @@ void Enemy::UpdateMoveGimmick() {
 	//移動方向に向きを合わせる
 	//Y軸周り角度(θy)
 	worldTransformBody_.rotation_.y = std::atan2(move.x, move.z);
-	worldTransformL_arm_.rotation_.y = std::atan2(move.x, move.z);
-	worldTransformR_arm_.rotation_.y = std::atan2(move.x, move.z);
 
 	//結果ででた位置を中心位置に加算し、それを描画位置とする
 	worldTransformBody_.translation_.x = center.x + add_x;
 	worldTransformBody_.translation_.z = center.z + add_z;
-	worldTransformL_arm_.translation_.x = center.x + add_x;
-	worldTransformL_arm_.translation_.z = center.z + add_z;
-	worldTransformR_arm_.translation_.x = center.x + add_x;
-	worldTransformR_arm_.translation_.z = center.z + add_z;
-
-	worldTransformL_arm_.translation_.x -= 2.5f;
-	worldTransformR_arm_.translation_.x += 2.5f;
 
 	// 角度更新
 	angle.x += 1.0f;
@@ -76,19 +67,11 @@ void Enemy::Initialize(const std::vector<Model*>& models) {
 	worldTransformL_arm_.Initialize();
 	worldTransformR_arm_.Initialize();
 
-	worldTransformBody_.translation_.y = 1.5f;
-	//worldTransformBody_.translation_.z = 8.0f;
-	//worldTransformBody_.rotation_.y = -1.5f;
-
-	worldTransformL_arm_.translation_.y = 1.5f;
-	//worldTransformL_arm_.translation_.z = 8.0f;
-	//worldTransformL_arm_.rotation_.x = 1.5f;
-	//worldTransformL_arm_.rotation_.y = -0.0f;
-
-	worldTransformR_arm_.translation_.y = 1.5f;
-	//worldTransformR_arm_.translation_.z = 8.0f;
-	//worldTransformR_arm_.rotation_.x = 1.5f;
-	//worldTransformR_arm_.rotation_.y = -0.0f;
+	worldTransformBody_.translation_.y = 2.0f;
+	worldTransformL_arm_.parent_ = &worldTransformBody_;
+	worldTransformL_arm_.translation_.z -= 2.5f;
+	worldTransformR_arm_.parent_ = &worldTransformBody_;
+	worldTransformR_arm_.translation_.z += 2.5f;
 
 	InitializeMoveGimmick();
 }

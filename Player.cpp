@@ -72,36 +72,18 @@ void Player::BehaviorRootUpdate() {
 
 		//移動方向に向きを合わせる
 		//Y軸周り角度(θy)
-		worldTransformBase_.rotation_.y = std::atan2(move.x, move.z);
+		worldTransformBase_.rotation_.y = std::atan2(-move.x, -move.z);
 
 		//移動
 		worldTransformBase_.translation_ = Add(worldTransformBase_.translation_, move);
 
-		//親子関係
-		worldTransformBody_.translation_ = worldTransformBase_.translation_;
-		worldTransformBody_.translation_.y = worldTransformBase_.translation_.y + 3.5f;
-		worldTransformBody_.rotation_.y = -worldTransformBase_.rotation_.y;
-
-		worldTransformFace_.translation_ = worldTransformBase_.translation_;
-		worldTransformFace_.translation_.y = worldTransformBase_.translation_.y + 3.5f;
-		worldTransformFace_.rotation_.y = worldTransformBase_.rotation_.y;
-
-		worldTransformL_arm_.translation_.x = worldTransformBase_.translation_.x + 0.75f;
-		worldTransformL_arm_.translation_.y = worldTransformBase_.translation_.y + 3.5f;
-		worldTransformL_arm_.translation_.z = worldTransformBase_.translation_.z;
-		worldTransformL_arm_.rotation_.y = worldTransformBase_.rotation_.y;
-
-		worldTransformR_arm_.translation_.x = worldTransformBase_.translation_.x - 0.75f;
-		worldTransformR_arm_.translation_.y = worldTransformBase_.translation_.y + 3.5f;
-		worldTransformR_arm_.translation_.z = worldTransformBase_.translation_.z;
-		worldTransformR_arm_.rotation_.y = worldTransformBase_.rotation_.y;
+		worldTransformBase_.UpdateMatrix();
+		worldTransformBody_.UpdateMatrix();
+		worldTransformFace_.UpdateMatrix();
+		worldTransformL_arm_.UpdateMatrix();
+		worldTransformR_arm_.UpdateMatrix();
 	}
 
-	worldTransformBase_.UpdateMatrix();
-	worldTransformFace_.UpdateMatrix();
-	worldTransformBody_.UpdateMatrix();
-	worldTransformL_arm_.UpdateMatrix();
-	worldTransformR_arm_.UpdateMatrix();
 	worldTransformWeapon_.UpdateMatrix();
 }
 
@@ -148,29 +130,34 @@ void Player::Initialize(const std::vector<Model*>& models) {
 	BaseCharacter::Initialize(models);
 
 	worldTransformBase_.Initialize();
-	worldTransformFace_.Initialize();
 	worldTransformBody_.Initialize();
+	worldTransformFace_.Initialize();
 	worldTransformL_arm_.Initialize();
 	worldTransformR_arm_.Initialize();
 	worldTransformWeapon_.Initialize();
 
-	worldTransformBase_.translation_.y = 3.5f;
-	worldTransformFace_.translation_.y = 3.5f;
-	worldTransformBody_.translation_.y = 3.5f;
-	worldTransformL_arm_.translation_.y = 3.5f;
-	worldTransformR_arm_.translation_.y = 3.5f;
-	worldTransformWeapon_.translation_.y = 3.5f;
+	worldTransformBody_.parent_ = &worldTransformBase_;
+	worldTransformFace_.parent_ = &worldTransformBody_;
+	worldTransformL_arm_.parent_ = &worldTransformBody_;
+	worldTransformR_arm_.parent_ = &worldTransformBody_;
+	worldTransformWeapon_.parent_ = &worldTransformBody_;
+
+	worldTransformL_arm_.translation_.x = worldTransformBase_.translation_.x + 0.75f;
+	worldTransformR_arm_.translation_.x = worldTransformBase_.translation_.x - 0.75f;
 
 	//浮遊ギミック初期化
 	InitializeFloatingGimmick();
 }
 
 void Player::Update() {
+	//ゲームパッドの状態を得る変数(XINPUT)
+	XINPUT_STATE joyState;
+
 	if (behaviorRequest_) {
 		//振る舞いを変更する
 		behavior_ = behaviorRequest_.value();
 		//各振る舞い事の初期化を実行
-		switch (behavior_){
+		switch (behavior_) {
 		case Player::Behavior::kRoot:
 		default:
 			BehaviorRootInitialize();
@@ -183,18 +170,24 @@ void Player::Update() {
 		behaviorRequest_ = std::nullopt;
 	}
 
-	switch (behavior_)
-	{
+	switch (behavior_){
 	//通常行動
 	case Behavior::kRoot:
 	default:
 		BehaviorRootUpdate();
 		break;
-		//攻撃行動
+	//攻撃行動
 	case Behavior::kAttack:
 		BehaviorAttackUpdate();
 		break;
 	}
+
+	if (joyState) {
+		behaviorRequest_ = Behavior::kAttack;
+	}
+	/*else {
+		behaviorRequest_ = Behavior::kRoot;
+	}*/
 }
 
 void Player::Draw(const ViewProjection& viewProjection) {

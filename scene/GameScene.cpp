@@ -29,11 +29,13 @@ void GameScene::Initialize() {
 	modelBody_.reset(Model::CreateFromOBJ("body", true));
 	modelL_arm_.reset(Model::CreateFromOBJ("left", true));
 	modelR_arm_.reset(Model::CreateFromOBJ("right", true));
+	modelWeapon_.reset(Model::CreateFromOBJ("hammer", true));
 	std::vector<Model*>playerModels = {
 		modelFace_.get(),
 		modelBody_.get(),
 		modelL_arm_.get(),
-		modelR_arm_.get()
+		modelR_arm_.get(),
+		modelWeapon_.get()
 	};
 
 	//敵キャラモデル

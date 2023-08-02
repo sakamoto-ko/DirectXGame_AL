@@ -37,25 +37,13 @@ void Player::UpdateFloatingGimmick() {
 	ImGui::End();
 }
 
-Player::Player() {}
+//通常行動初期化
+void Player::BehaviorRootInitialize() {
 
-Player::~Player() {}
-
-void Player::Initialize(const std::vector<Model*>& models) {
-	//既定クラスの初期化
-	BaseCharacter::Initialize(models);
-
-	worldTransformBase_.Initialize();
-	worldTransformFace_.Initialize();
-	worldTransformBody_.Initialize();
-	worldTransformL_arm_.Initialize();
-	worldTransformR_arm_.Initialize();
-
-	//浮遊ギミック初期化
-	InitializeFloatingGimmick();
 }
 
-void Player::Update() {
+//通常行動更新
+void Player::BehaviorRootUpdate() {
 	//既定クラスの更新
 	BaseCharacter::Update();
 
@@ -114,6 +102,99 @@ void Player::Update() {
 	worldTransformBody_.UpdateMatrix();
 	worldTransformL_arm_.UpdateMatrix();
 	worldTransformR_arm_.UpdateMatrix();
+	worldTransformWeapon_.UpdateMatrix();
+}
+
+//攻撃行動初期化
+void Player::BehaviorAttackInitialize() {
+	worldTransformWeapon_.rotation_.x = 0.0f;
+}
+
+//攻撃行動更新
+void Player::BehaviorAttackUpdate() {
+	//既定クラスの更新
+	BaseCharacter::Update();
+
+	//ゲームパッドの状態を得る変数(XINPUT)
+	//XINPUT_STATE joyState;
+
+	if (worldTransformWeapon_.rotation_.x >= -1.5f) {
+		worldTransformWeapon_.rotation_.x -= 0.1f;
+	}
+
+	worldTransformBase_.UpdateMatrix();
+	worldTransformFace_.UpdateMatrix();
+	worldTransformBody_.UpdateMatrix();
+	worldTransformL_arm_.UpdateMatrix();
+	worldTransformR_arm_.UpdateMatrix();
+	worldTransformWeapon_.UpdateMatrix();
+
+	ImGui::Begin("Player");
+	ImGui::SliderFloat3("face.translation", &worldTransformFace_.translation_.x, -10, 10);
+	ImGui::SliderFloat3("body.translation", &worldTransformBody_.translation_.x, -10, 10);
+	ImGui::SliderFloat3("L_arm.translation", &worldTransformL_arm_.translation_.x, -10, 10);
+	ImGui::SliderFloat3("R_arm.translation", &worldTransformR_arm_.translation_.x, -10, 10);
+	ImGui::SliderFloat3("weapon.translation_", &worldTransformWeapon_.translation_.x, -10, 10);
+	ImGui::SliderFloat3("weapon.rotation_", &worldTransformWeapon_.rotation_.x, -10, 10);
+	ImGui::End();
+}
+
+Player::Player() {}
+
+Player::~Player() {}
+
+void Player::Initialize(const std::vector<Model*>& models) {
+	//既定クラスの初期化
+	BaseCharacter::Initialize(models);
+
+	worldTransformBase_.Initialize();
+	worldTransformFace_.Initialize();
+	worldTransformBody_.Initialize();
+	worldTransformL_arm_.Initialize();
+	worldTransformR_arm_.Initialize();
+	worldTransformWeapon_.Initialize();
+
+	worldTransformBase_.translation_.y = 3.5f;
+	worldTransformFace_.translation_.y = 3.5f;
+	worldTransformBody_.translation_.y = 3.5f;
+	worldTransformL_arm_.translation_.y = 3.5f;
+	worldTransformR_arm_.translation_.y = 3.5f;
+	worldTransformWeapon_.translation_.y = 3.5f;
+
+	//浮遊ギミック初期化
+	InitializeFloatingGimmick();
+}
+
+void Player::Update() {
+	if (behaviorRequest_) {
+		//振る舞いを変更する
+		behavior_ = behaviorRequest_.value();
+		//各振る舞い事の初期化を実行
+		switch (behavior_){
+		case Player::Behavior::kRoot:
+		default:
+			BehaviorRootInitialize();
+			break;
+		case Player::Behavior::kAttack:
+			BehaviorAttackInitialize();
+			break;
+		}
+		//振る舞いリクエストをリセット
+		behaviorRequest_ = std::nullopt;
+	}
+
+	switch (behavior_)
+	{
+	//通常行動
+	case Behavior::kRoot:
+	default:
+		BehaviorRootUpdate();
+		break;
+		//攻撃行動
+	case Behavior::kAttack:
+		BehaviorAttackUpdate();
+		break;
+	}
 }
 
 void Player::Draw(const ViewProjection& viewProjection) {
@@ -124,4 +205,5 @@ void Player::Draw(const ViewProjection& viewProjection) {
 	models_[kModelBody]->Draw(worldTransformBody_, viewProjection);
 	models_[kModelL_arm]->Draw(worldTransformL_arm_, viewProjection);
 	models_[kModelR_arm]->Draw(worldTransformR_arm_, viewProjection);
+	models_[kModelWeapon]->Draw(worldTransformWeapon_, viewProjection);
 }

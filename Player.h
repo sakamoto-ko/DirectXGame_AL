@@ -15,11 +15,11 @@ private:
 	const ViewProjection* viewProjection_ = nullptr;
 
 	//浮遊ギミックの媒介変数
-	float floatingParameter_ = 0.0f;
+	float idelArmAngleMax_ = 0.0f;
 
 	uint16_t frame_ = 0;
-	uint16_t period = 0;
-	float amplitude = 0;
+	uint16_t floatingCycle_ = 0;
+	float floatingAmplitude_ = 0;
 
 	uint32_t kModelFace = 0;
 	uint32_t kModelBody = 1;
@@ -65,4 +65,7 @@ public:
 	void BehaviorAttackInitialize();
 	//攻撃行動更新
 	void BehaviorAttackUpdate();
+
+	//調整項目の適用
+	void ApplyGlobalVariables();
 };

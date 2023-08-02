@@ -104,12 +104,6 @@ void GameScene::Update() {
 	//ゲームパッドの状態を得る変数(XINPUT)
 	XINPUT_STATE joyState;
 
-	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
-		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
-			GlobalVariables::GetInstance()->SaveFile("Player");
-		}
-	}
-
 	skydome_->Update();
 	ground_->Update();
 

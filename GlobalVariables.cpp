@@ -83,7 +83,7 @@ void GlobalVariables::Update() {
 			//1Vector3型の値を保持していれば
 			else if (std::holds_alternative<Vector3>(item.value)) {
 				Vector3* ptr = std::get_if<Vector3>(&item.value);
-				ImGui::SliderFloat3(itemName.c_str(),reinterpret_cast<float*>(ptr),-10.0f,10.0f);
+				ImGui::SliderFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), -10.0f, 10.0f);
 			}
 		}
 
@@ -93,7 +93,7 @@ void GlobalVariables::Update() {
 		if (ImGui::Button("Save")) {
 			SaveFile(groupName);
 			std::string message = std::format("{}.json saved.", groupName);
-			MessageBoxA(nullptr,message.c_str(),"GlobalVariables",0);
+			MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
 		}
 
 		ImGui::EndMenu();
@@ -140,7 +140,7 @@ void GlobalVariables::SaveFile(const std::string& groupName) {
 		else if (std::holds_alternative<Vector3>(item.value)) {
 			//Vector3型のjson配列登録
 			Vector3 value = std::get<Vector3>(item.value);
-			root[groupName][itemName] = json::array({value.x,value.y,value.z});
+			root[groupName][itemName] = json::array({ value.x,value.y,value.z });
 		}
 	}
 
@@ -168,4 +168,132 @@ void GlobalVariables::SaveFile(const std::string& groupName) {
 	ofs << std::setw(4) << root << std::endl;
 	//ファイルを閉じる
 	ofs.close();
+}
+
+//ディレクトリの全ファイル読み込み
+void GlobalVariables::LoadFiles() {
+	std::string kDirectoryPath_ = "Resources/GlobalVariables/";
+	//ディレクトリがなければスキップする
+	if (!std::filesystem::exists("Resources/GlobalVariables/")) {
+		return;
+	}
+	std::filesystem::directory_iterator dir_it("Resources/GlobalVariables/");
+	for (const std::filesystem::directory_entry& entry : dir_it) {
+		//ファイルパスを取得
+		const std::filesystem::path& filePath = entry.path();
+		//ファイル拡張子を取得
+		std::string extension = filePath.extension().string();
+		//.jsonファイル以外はスキップ
+		if (extension.compare(".json") != 0) {
+			continue;
+		}
+		//ファイル読み込み
+		LoadFile(filePath.stem().string());
+	}
+}
+
+//ディレクトリのファイル読み込み
+void GlobalVariables::LoadFile(const std::string& groupName) {
+	//読み込むJSONファイルのフルパすを合成する
+	std::string filePath = kDirectoryPath + groupName + ".json";
+	//読み込む用ファイルストリーム
+	std::ifstream ifs;
+	ifs.open(filePath);
+	//ファイルオープン失敗？
+	if (ifs.fail()) {
+		std::string message = "Failed open data file for write.";
+		MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
+		assert(0);
+		return;
+	}
+
+	json root;
+
+	//json文字列からjsonのデータ構造に展開
+	ifs >> root;
+	ifs.close();
+
+	//グループを検索
+	json::iterator itGroup = root.find(groupName);
+
+	//未登録チェック
+	assert(itGroup != root.end());
+
+	//各アイテムについて
+	for (json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
+		//アイテム名を取得
+		const std::string& itemName = itItem.key();
+
+		//int32_t型の値を保持していれば
+		if (itItem->is_number_integer()) {
+			//int型の値を登録
+			int32_t value = itItem->get<int32_t>();
+			SetValue(groupName, itemName, value);
+		}
+
+		//float型の値を保持していれば
+		else if (itItem->is_number_float()) {
+			//float型の値を登録
+			double value = itItem->get<double>();
+			SetValue(groupName, itemName, static_cast<float>(value));
+		}
+
+		//要素数3の配列であれば
+		else if (itItem->is_array() && itItem->size() == 3) {
+			//float型のjson配列登録
+			Vector3 value = { itItem->at(0), itItem->at(1), itItem->at(2) };
+			SetValue(groupName, itemName, value);
+		}
+	}
+}
+
+//項目の追加(int)
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, int32_t value) {
+	//項目が未登録なら
+	if () {
+		SetValue(groupName, key, value);
+	}
+}
+//項目の追加(float)
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, float value) {
+	//項目が未登録なら
+	if () {
+		SetValue(groupName, key, value);
+	}
+}
+//項目の追加(Vector3)
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector3& value) {
+	//項目が未登録なら
+	if () {
+		SetValue(groupName, key, value);
+	}
+}
+
+//値の取得
+int32_t GlobalVariables::GetIntValue(const std::string& groupName, const std::string& key) const {
+	assert();
+	//グループの参照を取得
+	const Group& group = dates_.at(groupName);
+
+	assert();
+
+	return;
+}
+float GlobalVariables::GetFloatValue(const std::string& groupName, const std::string& key) const {
+	assert();
+	//グループの参照を取得
+	const Group& group = dates_.at(groupName);
+
+	assert();
+
+	return;
+}
+Vector3 GlobalVariables::GetVector3Value(const std::string& groupName, const std::string& key) const {
+	assert();
+	//グループの参照を取得
+	const Group& group = dates_.at(groupName);
+
+	assert();
+
+	return;
 }

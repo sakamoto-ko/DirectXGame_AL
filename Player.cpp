@@ -5,6 +5,18 @@
 #include "ImGuiManager.h"
 #include "GlobalVariables.h"
 
+//調整項目の適用
+void Player::ApplyGlobalVariables() {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const char* groupName = "Player";
+	worldTransformFace_.translation_ = globalVariables->GetVector3Value(groupName, "Head Translation");
+	worldTransformL_arm_.translation_ = globalVariables->GetVector3Value(groupName, "ArmL Translation");
+	worldTransformR_arm_.translation_ = globalVariables->GetVector3Value(groupName, "ArmR Translation");
+	floatingCycle_ = globalVariables->GetIntValue(groupName, "floatingCycle");
+	floatingAmplitude_ = globalVariables->GetFloatValue(groupName, "floatingAmplitude");
+	idelArmAngleMax_ = globalVariables->GetFloatValue(groupName, "idelArmAngleMax");
+}
+
 Player::Player() {}
 
 Player::~Player() {}
@@ -40,17 +52,22 @@ void Player::Initialize(const std::vector<Model*>& models) {
 	//グループを追加
 	GlobalVariables::GetInstance()->CreateGroup(groupName);
 
-	grobalVariables->SetValue(groupName, "Test", 90);
+	grobalVariables->AddItem(groupName, "Head Translation", worldTransformFace_.translation_);
+	grobalVariables->AddItem(groupName, "ArmL Translation", worldTransformL_arm_.translation_);
+	grobalVariables->AddItem(groupName, "ArmR Translation", worldTransformR_arm_.translation_);
+	grobalVariables->AddItem(groupName, "floatingCycle", floatingCycle_);
+	grobalVariables->AddItem(groupName, "floatingAmplitude", floatingAmplitude_);
+	grobalVariables->AddItem(groupName, "idelArmAngleMax", idelArmAngleMax_);
 }
 
 //浮遊ギミック初期化
 void Player::InitializeFloatingGimmick() {
 	//浮遊移動のサイクル<frame>
-	period = 60;
+	floatingCycle_ = 60;
 	//浮遊の振幅<m>
-	amplitude = 0.5f;
+	floatingAmplitude_ = 0.5f;
 
-	floatingParameter_ = 0.0f;
+	idelArmAngleMax_ = 0.0f;
 }
 
 //通常行動初期化
@@ -97,15 +114,15 @@ void Player::Update() {
 //浮遊ギミック更新
 void Player::UpdateFloatingGimmick() {
 	//1フレームでのパラメータ加算値
-	const float step = 2.0f * PAI / period;
+	const float step = 2.0f * PAI / floatingCycle_;
 	//パラメータを1ステップ分加算
-	floatingParameter_ += step;
+	idelArmAngleMax_ += step;
 	//2πを超えたら0に戻す
-	floatingParameter_ = std::fmod(floatingParameter_, 2.0f * PAI);
+	idelArmAngleMax_ = std::fmod(idelArmAngleMax_, 2.0f * PAI);
 	//浮遊を座標に反映
-	worldTransformBase_.translation_.y = std::sin(floatingParameter_) * amplitude + 5.0f;
-	worldTransformL_arm_.rotation_.x = std::sin(floatingParameter_) * amplitude;
-	worldTransformR_arm_.rotation_.x = -std::sin(floatingParameter_) * amplitude;
+	worldTransformBase_.translation_.y = std::sin(idelArmAngleMax_) * floatingAmplitude_ + 5.0f;
+	worldTransformL_arm_.rotation_.x = std::sin(idelArmAngleMax_) * floatingAmplitude_;
+	worldTransformR_arm_.rotation_.x = -std::sin(idelArmAngleMax_) * floatingAmplitude_;
 
 	ImGui::Begin("Player");
 	ImGui::SliderFloat3("face.translation", &worldTransformFace_.translation_.x, -10, 10);
@@ -114,8 +131,8 @@ void Player::UpdateFloatingGimmick() {
 	ImGui::SliderFloat3("R_arm.translation", &worldTransformR_arm_.translation_.x, -10, 10);
 	ImGui::SliderFloat3("weapon.translation_", &worldTransformWeapon_.translation_.x, -10, 10);
 	ImGui::SliderFloat3("weapon.rotation_", &worldTransformWeapon_.rotation_.x, -10, 10);
-	ImGui::SliderInt("period", reinterpret_cast<int*>(&period), 1, 144);
-	ImGui::SliderFloat("amplitude", &amplitude, 0.0f, PAI * 2.0f);
+	ImGui::SliderInt("period", reinterpret_cast<int*>(&floatingCycle_), 1, 144);
+	ImGui::SliderFloat("amplitude", &floatingAmplitude_, 0.0f, PAI * 2.0f);
 	ImGui::End();
 }
 

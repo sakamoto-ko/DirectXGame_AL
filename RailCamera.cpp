@@ -57,7 +57,7 @@ void RailCamera::Update() {
 		}
 	}*/
 	//kRotSpeed.x = 0.01f;
-	worldTransform_.rotation_ = Add(worldTransform_.rotation_, kRotSpeed);
+	worldTransform_.rotation_ = Add(kRotSpeed,worldTransform_.rotation_ );
 
 	//ワールドトランスフォームのワールド座標再計算
 	worldTransform_.UpdateMatrix();
@@ -66,8 +66,12 @@ void RailCamera::Update() {
 	viewProjection_.matView = Inverse(worldTransform_.matWorld_);
 
 	//カメラの座標を画面表示させる処理
+#ifdef _DEBUG
+
 	ImGui::Begin("Camera");
 	ImGui::DragFloat3("Camera.translation", &worldTransform_.translation_.x, 0.01f);
 	ImGui::DragFloat3("Camera.rotate", &worldTransform_.rotation_.x, 0.01f);
 	ImGui::End();
+#endif // _DEBUG
+
 }

@@ -525,3 +525,72 @@ Vector3 Add(Vector3 v1, Vector3 v2) {
 	};
 	return result;
 }
+float Clamp(float x, float min, float max) {
+
+	if (x > max) {
+		return max;
+	}
+
+	if (x < min) {
+		return min;
+	}
+
+	return x;
+}
+
+void EaseInLeft(Vector2& pos, float& velocity) {
+	float accelelate = 0.8f;
+
+	velocity += accelelate;
+	pos.x -= velocity;
+
+}
+void EaseInRight(Vector2& pos, float& velocity) {
+	float accelelate = 0.8f;
+
+	velocity += accelelate;
+	pos.x += velocity;
+
+}
+void EaseInUp(Vector2& pos, float& velocity) {
+	float accelelate = 0.03f;
+
+	velocity += accelelate;
+	pos.y -= velocity;
+
+}
+void EaseInDown(Vector2& pos, float& velocity) {
+	float accelelate = 0.03f;
+
+	velocity += accelelate;
+	pos.y += velocity;
+}
+
+void EaseOutLeft(Vector2& pos, float velocity) {
+	float accelelate = -0.03f;
+
+	velocity += accelelate;
+	pos.x -= velocity;
+
+}
+void EaseOutRight(Vector2& pos, float& velocity) {
+	float accelelate = -0.03f;
+
+	velocity += accelelate;
+	pos.x += velocity;
+
+}
+void EaseOutUp(Vector2& pos, float& velocity) {
+	float accelelate = -0.03f;
+
+	velocity += accelelate;
+	pos.y -= velocity;
+
+}
+void EaseOutDown(Vector2& pos, float& velocity) {
+	float accelelate = -0.03f;
+
+	velocity += accelelate;
+	pos.y += velocity;
+
+}

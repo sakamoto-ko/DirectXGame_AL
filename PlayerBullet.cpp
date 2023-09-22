@@ -25,11 +25,11 @@ PlayerBullet::PlayerBullet() {}
 PlayerBullet::~PlayerBullet() {}
 
 // 初期化
-void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vector3 velocity) {
+void PlayerBullet::Initialize(Model* model, uint32_t textureHandle, const Vector3& position, const Vector3 velocity) {
 	assert(model);
 
 	model_ = model;
-	textureHandle_ = TextureManager::Load("white.jpg");
+	textureHandle_ = textureHandle;
 
 	worldTransform_.Initialize();
 
@@ -37,6 +37,7 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vecto
 
 	//引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;
+	velocity_.y = 0.0f;
 }
 
 // 更新

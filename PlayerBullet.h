@@ -41,7 +41,7 @@ public:
 	PlayerBullet();
 	~PlayerBullet();
 	// 初期化
-	void Initialize(Model* model, const Vector3& position, const Vector3 velocity);
+	void Initialize(Model* model, uint32_t textureHandle, const Vector3& position, const Vector3 velocity);
 	// 更新
 	void Update();
 	// 描画

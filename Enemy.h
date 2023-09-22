@@ -15,11 +15,15 @@ private:
 		Leave,//離脱
 	};
 
+	//カメラのビュープロジェクション
+	const ViewProjection* viewProjection_ = nullptr;
+
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 
 	//モデル
 	Model* model_ = nullptr;
+	Model* modelBullet_ = nullptr;
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
@@ -48,7 +52,7 @@ private:
 	//デスフラグ
 	bool isDead_ = false;
 
-	float move;
+	//float move;
 
 	//メンバ関数ポインタ
 	void (Enemy::* pFunc)();
@@ -56,11 +60,22 @@ private:
 	//メンバ関数ポインタのテーブル
 	static void (Enemy::* spFuncTable[])();
 
+	//円運動用
+	//中心座標
+	Vector3 center{};
+	//角度
+	Vector3 angle{};
+	//半径の長さ
+	float length;
+	int32_t hp_ = 40;
+
+	int32_t deathTimer = 900;
+
 public:
 	Enemy();
 	~Enemy();
 	//初期化
-	void Initialize(Model* model, uint32_t textureHandle, Vector3 pos);
+	void Initialize(Model* model, Model* modelBullet, uint32_t textureHandle, Vector3 pos);
 	//更新
 	void Update();
 	//描画
@@ -75,6 +90,14 @@ public:
 	//void LeaveInit();
 	//離脱フェーズ更新
 	void LeaveUpdate();
+
+	//移動初期化
+	void InitializeMoveGimmick();
+
+	//移動更新
+	void UpdateMoveGimmick();
+
+	void SetViewPRojection(const ViewProjection* viewProjection) { viewProjection_ = viewProjection; }
 
 	//弾発射
 	void Fire();
@@ -97,4 +120,5 @@ public:
 
 	//
 	bool IsDead() { return isDead_; }
+	int32_t GetEnemyHp() { return hp_; }
 };

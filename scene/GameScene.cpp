@@ -659,11 +659,11 @@ void GameScene::ScoreInitialize() {
 	scorePos[3] = scoreSprite_[4]->GetPosition();
 	scorePos[4] = scoreSprite_[5]->GetPosition();
 
-	scoreVelocity[0] = { 0.0f,4.5f };
-	scoreVelocity[1] = { 0.0f,4.5f };
-	scoreVelocity[2] = { 0.0f,4.5f };
-	scoreVelocity[3] = { 0.0f,4.5f };
-	scoreVelocity[4] = { 0.0f,4.5f };
+	scoreVelocity[0] = { 0.0f,6.0f };
+	scoreVelocity[1] = { 0.0f,6.0f };
+	scoreVelocity[2] = { 0.0f,6.0f };
+	scoreVelocity[3] = { 0.0f,6.0f };
+	scoreVelocity[4] = { 0.0f,6.0f };
 
 	isScoreDraw_ = false;
 	isPressButton_ = false;
